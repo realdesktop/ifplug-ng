@@ -47,7 +47,7 @@ href="@PACKAGE_URL@ifplugd-0.25.tar.gz">Version 0.25</a> released,
 changes include: Revert to more classic link checking support. The new
 checking order is: ETHTOOL, MII, WLAN, IFF. The obsolete API "PRIV" is
 no longer checked by the automatic API detection code. However, you may enable
-it forcibly by passing <tt>-w priv</tt> on the command line.</p>
+it forcibly by passing <tt>-m priv</tt> on the command line.</p>
 
 <div class="news-date">Mon Apr 12 2004: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.24.tar.gz">Version
