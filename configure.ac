@@ -19,36 +19,31 @@
 # along with ifplugd; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-AC_PREREQ(2.57)
-AC_INIT([ifplugd], [0.21], [mzvscyhtq (at) 0pointer (dot) de])
+AC_PREREQ(2.59)
+AC_INIT([ifplugd],[0.21],[mzvscyhtq (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/ifplugd.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])
 
-# Checks for programs.
-AC_PROG_CXX
-AC_PROG_CC
-
 AC_SUBST(PACKAGE_URL, [http://0pointer.de/lennart/projects/ifplugd/])
-
-# If using GCC specifiy some additional parameters
-if test "x$GCC" = "xyes" ; then
-   CFLAGS="$CFLAGS -pipe -Wall"
-fi
 
 if type -p stow > /dev/null && test -d /usr/local/stow ; then
    AC_MSG_NOTICE([*** Found /usr/local/stow: default install prefix set to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
    ac_default_prefix="/usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION}"
 fi
 
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
-# Checks for libraries.
-AC_CHECK_LIB([daemon], [daemon_fork],, [AC_MSG_ERROR([*** Sorry, you have to install libdaemon ***])])
-AC_CHECK_LIB([daemon], [daemon_pid_file_kill_wait],, [AC_MSG_WARN([*** libdaemon too old, --wait-on-kill is not going to be supported. Consider updating to libdaemon 0.3. ***])])
+# If using GCC specifiy some additional parameters
+if test "x$GCC" = "xyes" ; then
+   CFLAGS="$CFLAGS -pipe -Wall"
+fi
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -65,13 +60,17 @@ AC_C_VOLATILE
 AC_FUNC_FORK
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_SELECT_ARGTYPES
-#AC_FUNC_MALLOC
+AC_FUNC_MALLOC
 AC_TYPE_SIGNAL
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([alarm dup2 memset select setenv socket strchr strdup strerror strrchr strspn])
 
+PKG_CHECK_MODULES(LIBDAEMON, [ libdaemon >= 0.4 ])
+AC_SUBST(LIBDAEMON_CFLAGS)
+AC_SUBST(LIBDAEMON_LIBS)
+
 # Init script location
-AC_ARG_WITH(initdir, AC_HELP_STRING([--with-initdir=DIR], [Install init script in DIR (system dependent default)]))
+AC_ARG_WITH(initdir, AS_HELP_STRING(--with-initdir=DIR,Install init script in DIR (system dependent default)))
 
 test "x$with_initdir" = xyes -o "x$with_initdir" = xno && with_initdir=
 
@@ -81,20 +80,20 @@ if test "x$with_initdir" = x ; then
     else
     	if test -d /etc/rc.d/init.d ; then
         	SYSINITDIR=/etc/rc.d/init.d
-	else
+    	else
         	AC_MSG_ERROR([missing --with-initdir=DIR])
-	fi
+	    fi
     fi
 else
    SYSINITDIR="$with_initdir"
 fi
 
-AC_MSG_NOTICE([Init sript will be installed in $SYSINITDIR])
+AC_MSG_NOTICE([*** Init sript will be installed in $SYSINITDIR ***])
 AC_SUBST(SYSINITDIR)
 
 # LYNX documentation generation
 AC_ARG_ENABLE(lynx,
-        AC_HELP_STRING([--disable-lynx], [Turn off lynx usage for documentation generation]),
+        AS_HELP_STRING(--disable-lynx,Turn off lynx usage for documentation generation),
 [case "${enableval}" in
   yes) lynx=yes ;;
   no)  lynx=no ;;
@@ -113,7 +112,7 @@ AM_CONDITIONAL([USE_LYNX], [test "x$lynx" = xyes])
 
 # XMLTOMAN manpage generation
 AC_ARG_ENABLE(xmltoman,
-        AC_HELP_STRING([--disable-xmltoman], [Disable rebuilding of man pages with xmltoman]),
+        AS_HELP_STRING(--disable-xmltoman,Disable rebuilding of man pages with xmltoman),
 [case "${enableval}" in
   yes) xmltoman=yes ;;
   no)  xmltoman=no ;;
@@ -133,7 +132,7 @@ AM_CONDITIONAL([USE_XMLTOMAN], [test "x$xmltoman" = xyes])
 
 # subversion release number generation
 AC_ARG_ENABLE(subversion,
-        AC_HELP_STRING([--disable-subversion], [Disable rebuilding of svn-release.h]),
+        AS_HELP_STRING(--disable-subversion,Disable rebuilding of svn-release.h),
 [case "${enableval}" in
   yes) subversion=yes ;;
   no)  subversion=no ;;
