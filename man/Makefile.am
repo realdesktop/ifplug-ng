@@ -34,17 +34,16 @@ ifstatus.8.xml: ifstatus.8.xml.in Makefile
 	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g' -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< > $@
 
 if USE_XMLTOMAN
- 
+
 CLEANFILES += $(man_MANS)
-  
+
 ifplugd.8: ifplugd.8.xml Makefile
 	xmltoman $< > $@
-	   
+
 ifplugd.conf.5: ifplugd.conf.5.xml Makefile
 	xmltoman $< > $@
-	   
+
 ifstatus.8: ifstatus.8.xml Makefile
 	xmltoman $< > $@
-	   
+
 endif
-	   
