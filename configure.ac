@@ -40,7 +40,7 @@ if type -p stow > /dev/null && test -d /usr/local/stow ; then
    AC_MSG_NOTICE([*** Found /usr/local/stow: installing to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
    ac_default_prefix="/usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION}"
 else
-   ac_default_prefix=="/usr/local"
+   ac_default_prefix="/usr/local"
 fi
 
 AC_PROG_CPP
@@ -84,11 +84,11 @@ if test "x$with_initdir" = x ; then
     	if test -d /etc/rc.d/init.d ; then
         	SYSINITDIR=/etc/rc.d/init.d
 	else
-        	AC_MSG_ERROR(missing --with-initdir=DIR)
+        	AC_MSG_ERROR([missing --with-initdir=DIR])
 	fi
     fi
 else
-   SYSINITDIR=$with_initdir
+   SYSINITDIR="$with_initdir"
 fi
 
 AC_MSG_NOTICE([Init sript will be installed in $SYSINITDIR])
