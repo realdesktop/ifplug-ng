@@ -42,8 +42,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
-<div class="news-date">Sat Dec 18 2004: </div> <p class="news-text"><a
-href="@PACKAGE_URL@ifplugd-0.26.tar.gz">Version 0.25</a> released,
+<div class="news-date">Sun Dec 19 2004: </div> <p class="news-text"><a
+href="@PACKAGE_URL@ifplugd-0.26.tar.gz">Version 0.26</a> released,
 changes include: changed MII code for better compatibility with some 3COM Boomerang cards.</p>
 
 <div class="news-date">Mon May 10 2004: </div> <p class="news-text"><a
