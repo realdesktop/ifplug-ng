@@ -43,6 +43,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 <h2><a name="news">News</a></h2>
 
 <div class="news-date">Fri Sep 13 2003: </div> <p class="news-text"><a
+href="@PACKAGE_URL@ifplugd-0.17b.tar.gz">Version
+0.17b</a> released, changes include: typo and date fix</p>
+
+<div class="news-date">Fri Sep 13 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.17.tar.gz">Version
 0.17</a> released, changes include: documentation update, better support for multiple interfaces, gcc 2.95 build fix</p>
 
@@ -274,7 +278,7 @@ manpage</p>
 
 <hr/>
 <address>Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, July 2003</address>
-<div><i>$Id: README.html.in 9 2003-07-05 17:59:40Z lennart $</i></div>
+<div><i>$Id$</i></div>
 
 </body>
 </html>
