@@ -460,7 +460,10 @@ void work(void) {
         interface_status_t s;
         fd_set qfds = fds;
 		int d;
-        struct timeval tv = { polltime, 0 };
+        struct timeval tv;
+
+		tv.tv_sec = polltime;
+		tv.tv_usec = 0;
         
         if (select(FD_SETSIZE, &qfds, NULL, NULL, &tv) < 0) {
             if (errno == EINTR)

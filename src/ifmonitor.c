@@ -37,7 +37,7 @@
 #include "nlapi.h"
 
 static int callback(struct nlmsghdr *n, void *u) {
-    int (*cb)(int b, int index, unsigned short type, const char *name) = u;
+    int (*cb)(int b, int index, unsigned short type, const char *name) = (int (*)(int b, int index, unsigned short type, const char *name)) u;
     
     if (n->nlmsg_type == RTM_NEWLINK || n->nlmsg_type == RTM_DELLINK) {
         struct rtattr *a;
@@ -54,7 +54,7 @@ static int callback(struct nlmsghdr *n, void *u) {
 
         memset(&ifname, 0, sizeof(ifname));
         
-        a = (void*) i + NLMSG_ALIGN(sizeof(struct ifinfomsg));
+        a = (struct rtattr*) ((char*) i + NLMSG_ALIGN(sizeof(struct ifinfomsg)));
         la = NLMSG_PAYLOAD(n, sizeof(struct ifinfomsg));
                 
         while (RTA_OK(a, la)) {
@@ -78,5 +78,5 @@ static int callback(struct nlmsghdr *n, void *u) {
 }
 
 int ifmonitor_init(int (*cb) (int b, int index, unsigned short type, const char *name)) {
-    return nlapi_register(callback, cb);
+    return nlapi_register(callback, (void*) cb);
 }

@@ -86,7 +86,7 @@ int nlapi_work(int block) {
         for (; bytes > 0; p = NLMSG_NEXT(p, bytes)) {
             struct callback_info *c;
             
-            if (!NLMSG_OK(p, bytes) || bytes < sizeof(struct nlmsghdr) || bytes < p->nlmsg_len) {
+            if (!NLMSG_OK(p, bytes) || (size_t) bytes < sizeof(struct nlmsghdr) || (size_t) bytes < p->nlmsg_len) {
                 daemon_log(LOG_ERR, "NLAPI: Packet too small or truncated!\n");
                 return -1;
             }
