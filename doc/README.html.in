@@ -42,7 +42,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
-<div class="news-date">Mon Nov 9 2003: </div> <p class="news-text"><a
+<div class="news-date">Sun Nov 9 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.20.tar.gz">Version
 0.20</a> released, changes include: fix wrong message, build fix</a></p>
 
