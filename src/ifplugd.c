@@ -99,7 +99,7 @@ void beep(int b) {
     if (!use_beep)
         return;
     
-    if ((fd = open("/dev/tty1", O_WRONLY)) < 0) {
+    if ((fd = open("/dev/tty1", O_WRONLY|O_NOCTTY)) < 0) {
         use_beep = 0;
         daemon_log(LOG_WARNING, "Could not open /dev/tty, cannot beep.");
         goto finish;
