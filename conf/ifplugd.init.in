@@ -55,6 +55,8 @@ fi
 
 [ -f $CFG ] && . $CFG
 
+[ -n "$2" ] && INTERFACES="$2"
+
 [ "$INTERFACES" = "auto" ] && INTERFACES=`cat /proc/net/dev | awk '{ print $1 }' | egrep '^(eth|wlan)' | cut -d: -f1`
 
 case "$1" in

@@ -473,6 +473,8 @@ void work(void) {
             goto finish;
         }
 
+		//daemon_log(LOG_INFO, "select()");
+		
 		d = disabled;
 		s = status;
 		
@@ -485,8 +487,8 @@ void work(void) {
 
 			if (d && !disabled) {
 				daemon_log(LOG_INFO, "Interface enabled");
-				if (welcome_iface(fd, interface) < 0)
-					goto finish;
+				welcome_iface(fd, interface);
+				status = IFSTATUS_DOWN;
 			}
 			
 			if (!d && disabled) {
@@ -495,6 +497,34 @@ void work(void) {
 			}
 		}
             
+
+        if (!paused && !disabled) {
+			//daemon_log(LOG_INFO, "detect");
+            if ((status = detect_beat(fd, interface)) == IFSTATUS_ERR) {
+				if (!use_ifmonitor)
+					goto finish;
+
+				status = IFSTATUS_DOWN;
+			}
+		}
+
+		if (status != s) {
+			daemon_log(LOG_INFO, "Link beat %s.", status == IFSTATUS_DOWN ? "lost" : "detected");
+			beep(status == IFSTATUS_UP ? 0 : 1);
+			
+			if (t)
+				t = 0;
+			else {
+				t = time(NULL);
+				
+				if (status == IFSTATUS_UP)
+					t += delay_up;
+				
+				if (status == IFSTATUS_DOWN)
+					t += delay_down;
+            }
+        }
+
         if (FD_ISSET(sigfd, &qfds)) {
             int sig;
 
@@ -540,35 +570,7 @@ void work(void) {
             }
         }
 
-
-        if (!paused && !disabled) {
-			//daemon_log(LOG_INFO, "detect");
-            if ((status = detect_beat(fd, interface)) == IFSTATUS_ERR) {
-				if (!use_ifmonitor)
-					break;
-
-				status = IFSTATUS_DOWN;
-			}
-		}
-
-		if (status != s) {
-			daemon_log(LOG_INFO, "Link beat %s.", status == IFSTATUS_DOWN ? "lost" : "detected");
-			beep(status == IFSTATUS_UP ? 0 : 1);
-			
-			if (t)
-				t = 0;
-			else {
-				t = time(NULL);
-				
-				if (status == IFSTATUS_UP)
-					t += delay_up;
-				
-				if (status == IFSTATUS_DOWN)
-					t += delay_down;
-            }
-        }
-
-        if (t && t < time(NULL)) {
+		if (t && t < time(NULL)) {
             t = 0;
 
             if (action(status) < 0)

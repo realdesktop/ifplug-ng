@@ -247,10 +247,10 @@ static int is_assoc_ap(uint8_t mac[ETH_ALEN]) {
 }
 
 interface_status_t interface_detect_beat_wlan(int fd, char *iface) {
+    
     if (interface_auto_up)
         interface_up(fd, iface);
     
-
     uint8_t mac[6];
     int q;
     struct iwreq req;
@@ -264,6 +264,8 @@ interface_status_t interface_detect_beat_wlan(int fd, char *iface) {
         return IFSTATUS_ERR;
     }
 
+    memcpy(mac, &(req.u.ap_addr.sa_data), ETH_ALEN);
+           
     if (!is_assoc_ap(mac))
         return IFSTATUS_DOWN;
 
