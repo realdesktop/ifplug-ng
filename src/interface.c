@@ -18,6 +18,10 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <linux/sockios.h>
 #include <linux/if_ether.h>
 #include <sys/types.h>
@@ -108,7 +112,7 @@ interface_status_t interface_detect_beat_mii(int fd, char *iface) {
         return IFSTATUS_ERR;
     }
 
-    return (((unsigned short*) &ifr.ifr_data)[3] & 0x0016) == 0x0004 ? IFSTATUS_UP : IFSTATUS_DOWN;
+    return (((unsigned short*) &ifr.ifr_data)[3] & 0x0004) ? IFSTATUS_UP : IFSTATUS_DOWN;
 }
 
 interface_status_t interface_detect_beat_priv(int fd, char *iface) {
@@ -136,7 +140,7 @@ interface_status_t interface_detect_beat_priv(int fd, char *iface) {
         return IFSTATUS_ERR;
     }
 
-    return (((unsigned short*) &ifr.ifr_data)[3] & 0x0016) == 0x0004 ? IFSTATUS_UP : IFSTATUS_DOWN;
+    return (((unsigned short*) &ifr.ifr_data)[3] & 0x0004) ? IFSTATUS_UP : IFSTATUS_DOWN;
 }
 
 interface_status_t interface_detect_beat_ethtool(int fd, char *iface) {

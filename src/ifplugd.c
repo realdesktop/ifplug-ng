@@ -19,6 +19,10 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -51,10 +55,6 @@
 #include "nlapi.h"
 #include "ifmonitor.h"
 #include "svn-revision.h"
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #define VARRUN "/var/run"
 #define IFPLUGD_ENV_PREVIOUS "IFPLUGD_PREVIOUS"
