@@ -161,6 +161,14 @@
 	  </option>
 
 	  <option>
+		<p><opt>-W | --wait-on-kill</opt></p> 
+
+		<optdesc><p> When killing a running daemon (with -k) wait
+		until the daemon died.
+        </p></optdesc>
+	  </option>
+
+	  <option>
 		<p><opt>-x | --extra-arg=</opt> <arg>ARG</arg></p>
 		<optdesc><p>
 			Specify an extra argument to be passed to the action script.

@@ -20,7 +20,7 @@ man_MANS = ifplugd.8 ifplugd.conf.5 ifstatus.8
 
 noinst_DATA = ifplugd.8.xml ifplugd.conf.5.xml ifstatus.8.xml  
 
-EXTRA_DIST = $(man_MANS) ifplugd.8.xml.in ifplugd.conf.5.xml.in ifstatus.8.xml.in xmltoman.css xmltoman.xsl
+EXTRA_DIST = $(man_MANS) ifplugd.8.xml.in ifplugd.conf.5.xml.in ifstatus.8.xml.in xmltoman.css xmltoman.xsl xmltoman.dtd
 
 CLEANFILES = ifplugd.8.xml ifplugd.conf.5.xml ifstatus.8.xml  
 
