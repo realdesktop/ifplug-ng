@@ -1,7 +1,7 @@
 #ifndef foointerfacehfoo
 #define foointerfacehfoo
 
-/* $Id: interface.h 1.2 Wed, 23 Oct 2002 20:49:08 +0200 lennart $ */
+/* $Id$ */
 
 /*
  * This file is part of ifplugd.
@@ -32,5 +32,6 @@ interface_status_t interface_detect_beat_mii(int fd, char *iface);
 interface_status_t interface_detect_beat_priv(int fd, char *iface);
 interface_status_t interface_detect_beat_ethtool(int fd, char *iface);
 interface_status_t interface_detect_beat_wlan(int fd, char *iface);
+interface_status_t interface_detect_beat_iff(int fd, char *iface);
 
 #endif

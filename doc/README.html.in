@@ -42,6 +42,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
+<div class="news-date">Mon Apr 12 2004: </div> <p class="news-text"><a
+href="@PACKAGE_URL@ifplugd-0.24.tar.gz">Version
+0.24</a> released, changes include: add <tt>IFF_RUNNING</tt> link check support and make it the default. This might break some setups. You may workaround this by passing <tt>-m</tt> to the daemon for selecting a different API. Please report breakages!</p>
+
 <div class="news-date">Wed Apr 7 2004: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.23.tar.gz">Version
 0.23</a> released, changes include: don't make <tt>/dev/tty1</tt> the controlling TTY when beeping</p>
@@ -113,11 +117,11 @@ the interface when a cable is really connected.</p>
 
   <li>Supports the Linux <tt>SIOCETHTOOL</tt> (newer, aka <tt>ethtool</tt> API), <tt>SIOCGMIIREG</tt>
   (older, aka <tt>mii-diag</tt>/<tt>mii-tool</tt> API) and SIOCDEVPRIVATE (oldest, aka
-  <tt>mii-tool</tt> API) <tt>ioctl()</tt>s for getting link status.</li>
+  <tt>mii-tool</tt> API) <tt>ioctl()</tt>s for getting link status. Release 0.24 introduces support for link detection with the <tt>IFF_RUNNING</tt> interface flag.</li>
 
   <li>Syslog support</li>
 
-  <li>Small program - the binary is just 19 KB (plus 11 KB for <tt>libdaemon</tt>).</li>
+  <li>Small program - the binary is just 25 KB (plus 16 KB for <tt>libdaemon</tt>).</li>
   
   <li>Multiple ethernet interface support</li>
 
@@ -289,7 +293,7 @@ compilation and <tt>make install</tt> (as root) for installation of
 <tt>${sysconfdir}/init.d/ifplugd</tt>, however no <tt>/etc/rc?.d/</tt> links are created
 for it.</p>
 
-<p>Extensive installation instructions for <tt>ifplugd</tt> are available at <a href="http://www.acmc.uq.edu.au/~gbe/linux/installation_of_ifplugd.html">Geoff Ericksson's web site</a>.</p>
+<p>Extensive installation instructions for installation of <tt>ifplugd</tt> on Fedora Core 1 are available at <a href="http://www.acmc.uq.edu.au/~gbe/linux/installation_of_ifplugd.html">Geoff Ericksson's web site</a>.</p>
 
 <h2><a name="acks">Acknowledgements</a></h2>
 

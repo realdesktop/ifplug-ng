@@ -32,10 +32,20 @@
 	  <p>ifplugstatus is an utility which may be used to detect the link
 	  status of a local Linux ethernet device, much in the same way
 	  mii-diag, mii-tool and ethtool work. In fact it supports all
-	  three different APIs these three tools use. Thus, it provides
-	  maximal compatibility. The newest API (ethtool) is used first,
-	  than the next older (mii-diag) and at last the oldest
-	  (mii-tool). It may be used in shell script since it returns the
+	  three different APIs these three tools use. In addition it supports
+	  link checking with the IFF_RUNNING interface flag, which most modern 
+	  drivers (not only ethernet) support, and association status checking 
+	  with the wireless extension API for WLAN devices.</p>
+	  
+	  <p>The APIs are tried in the following order:</p>
+	 
+	  <p>First the cleanest API: <arg>IFF_RUNNING</arg> (aka ifconfig API)</p>
+	  <p>Second the newest API: <arg>SIOCETHTOOL</arg> (aka ethtool API)</p>
+	  <p>Third the next older API: <arg>SIOCGMIIREG</arg> (aka mii-diag API)</p>
+	  <p>Than the WLAN API: <arg>wireless extension</arg> (aka iwconfig API)</p>
+	  <p>Finally the oldest API: <arg>SIOCPRIV</arg> (aka mii-tool API)</p>
+	  
+	  <p>It may be used in shell script since it returns the
 	  current status as return value. It is especially useful to
 	  detect the available APIs on the used network driver. (Option 
 	  <opt>-v</opt>)</p>

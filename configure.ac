@@ -20,7 +20,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ(2.59)
-AC_INIT([ifplugd],[0.23],[mzvscyhtq (at) 0pointer (dot) de])
+AC_INIT([ifplugd],[0.24],[mzvscyhtq (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/ifplugd.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])
@@ -147,7 +147,7 @@ if test x$subversion = xyes ; then
      subversion=no
    fi
 fi
-                                                                                                                                                                                      
+
 AM_CONDITIONAL([USE_SUBVERSION], [test "x$subversion" = xyes])
 
 AC_CONFIG_FILES([src/Makefile Makefile man/Makefile conf/Makefile doc/Makefile doc/README.html patches/Makefile ifplugd.spec])

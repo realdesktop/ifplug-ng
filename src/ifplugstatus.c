@@ -51,7 +51,12 @@ int handle(char *iface) {
     if (verbose > 0) {
         printf("%s:\n", iface);
         
-        if ((s = interface_detect_beat_ethtool(fd, iface)) == IFSTATUS_ERR)
+        if ((s = interface_detect_beat_iff(fd, iface)) == IFSTATUS_ERR)
+            printf("    IFF_RUNNING failed.\n");
+        else
+            printf("    IFF_RUNNING: %s\n", s == IFSTATUS_UP ? "link beat detected" : "unplugged");
+        
+	if ((s = interface_detect_beat_ethtool(fd, iface)) == IFSTATUS_ERR)
             printf("    SIOCETHTOOL failed (%s)\n", strerror(errno));
         else
             printf("    SIOCETHTOOL: %s\n", s == IFSTATUS_UP ? "link beat detected" : "unplugged");
@@ -60,23 +65,24 @@ int handle(char *iface) {
             printf("    SIOCGMIIPHY failed (%s)\n", strerror(errno));
         else
             printf("    SIOCGMIIPHY: %s\n", s == IFSTATUS_UP ? "link beat detected" : "unplugged");
-        
-        if ((s = interface_detect_beat_priv(fd, iface)) == IFSTATUS_ERR)
-            printf("    SIOCDEVPRIVATE failed (%s)\n", strerror(errno));
-        else
-            printf("    SIOCDEVPRIVATE: %s\n", s == IFSTATUS_UP ? "link beat detected" : "unplugged");
 
         if ((s = interface_detect_beat_wlan(fd, iface)) == IFSTATUS_ERR)
             printf("    Wireless failed.\n");
         else
             printf("    Wireless: %s\n", s == IFSTATUS_UP ? "link beat detected" : "unplugged");
 
+        if ((s = interface_detect_beat_priv(fd, iface)) == IFSTATUS_ERR)
+            printf("    SIOCDEVPRIVATE failed (%s)\n", strerror(errno));
+        else
+            printf("    SIOCDEVPRIVATE: %s\n", s == IFSTATUS_UP ? "link beat detected" : "unplugged");
+
     } else {
-        
-        if ((s = interface_detect_beat_mii(fd, iface)) == IFSTATUS_ERR)
-	    if ((s = interface_detect_beat_ethtool(fd, iface)) == IFSTATUS_ERR)
-                if ((s = interface_detect_beat_wlan(fd, iface)) == IFSTATUS_ERR)
-                    s = interface_detect_beat_priv(fd, iface);
+
+        if ((s = interface_detect_beat_iff(fd, iface)) == IFSTATUS_ERR)
+            if ((s = interface_detect_beat_ethtool(fd, iface)) == IFSTATUS_ERR)
+                if ((s = interface_detect_beat_mii(fd, iface)) == IFSTATUS_ERR)
+                    if ((s = interface_detect_beat_wlan(fd, iface)) == IFSTATUS_ERR)
+                        s = interface_detect_beat_priv(fd, iface);
 
         switch(s) {
             case IFSTATUS_UP:

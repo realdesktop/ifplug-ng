@@ -136,8 +136,8 @@
 	  <option>
 		<p><opt>-m | --api-mode=</opt> <arg>MODE</arg></p> <optdesc><p>
 		Force a specific link beat detection ioctl() API. Possible
-		values are auto, wlan, ethtool, mii, and priv for automatic
-		detection, wireless extension, SIOCETHTOOL, SIOCGMIIREG
+		values are auto, iff, wlan, ethtool, mii, and priv for automatic
+		detection, interface flag (IFF_RUNNING), wireless extension, SIOCETHTOOL, SIOCGMIIREG
 		resp. SIOCPRIV. Only the first character of the argument is
 		relevant, case insensitive.  (default: auto) </p></optdesc>
 	  </option>

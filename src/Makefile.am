@@ -16,7 +16,7 @@
 # along with ifplugd; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-AM_CFLAGS = $(LIBDAEMON_CFLAGS) -DSYSCONFDIR="\"$(sysconfdir)\""
+AM_CFLAGS = $(LIBDAEMON_CFLAGS) -DSYSCONFDIR="\"$(sysconfdir)\"" -D_GNU_SOURCE
 LDADD = $(LIBDAEMON_LIBS)
 
 sbin_PROGRAMS = ifplugd ifplugstatus

@@ -19,8 +19,6 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
  */
 
-#define _GNU_SOURCE
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -87,7 +85,7 @@ int disabled = 0;
 
 interface_status_t failure_status = IFSTATUS_ERR;
 
-enum { API_AUTO, API_ETHTOOL, API_MII, API_PRIVATE, API_WLAN } api_mode = API_AUTO;
+enum { API_AUTO, API_ETHTOOL, API_MII, API_PRIVATE, API_WLAN, API_IFF } api_mode = API_AUTO;
 
 interface_status_t (*detect_beat_func)(int, char*);
 interface_status_t (*cached_detect_beat_func)(int, char*) = NULL;
@@ -256,15 +254,21 @@ interface_status_t detect_beat_auto(int fd, char *iface) {
     if (cached_detect_beat_func && (status = cached_detect_beat_func(fd, iface)) != IFSTATUS_ERR)
         return status;
     
-    if ((status = interface_detect_beat_mii(fd, iface)) != IFSTATUS_ERR) {
-        cached_detect_beat_func = interface_detect_beat_mii;
-        daemon_log(LOG_INFO, "Using detection mode: SIOCGMIIPHY");
+    if ((status = interface_detect_beat_iff(fd, iface)) != IFSTATUS_ERR) {
+        cached_detect_beat_func = interface_detect_beat_iff;
+        daemon_log(LOG_INFO, "Using detection mode: IFF_RUNNING");
         return status;
     }
-    
+
     if ((status = interface_detect_beat_ethtool(fd, iface)) != IFSTATUS_ERR) {
         cached_detect_beat_func = interface_detect_beat_ethtool;
         daemon_log(LOG_INFO, "Using detection mode: SIOCETHTOOL");
+        return status;
+    }
+    
+    if ((status = interface_detect_beat_mii(fd, iface)) != IFSTATUS_ERR) {
+        cached_detect_beat_func = interface_detect_beat_mii;
+        daemon_log(LOG_INFO, "Using detection mode: SIOCGMIIPHY");
         return status;
     }
 
@@ -400,7 +404,8 @@ void work(void) {
         case API_ETHTOOL: detect_beat_func = interface_detect_beat_ethtool; break;
         case API_MII: detect_beat_func = interface_detect_beat_mii; break;
         case API_PRIVATE: detect_beat_func = interface_detect_beat_priv; break;
-        case API_WLAN: detect_beat_func = interface_detect_beat_wlan;break;
+        case API_WLAN: detect_beat_func = interface_detect_beat_wlan; break;
+		case API_IFF: detect_beat_func = interface_detect_beat_iff; break;
             
         default:
             detect_beat_func = detect_beat_auto; 
@@ -609,6 +614,7 @@ void usage(char *p) {
         case API_MII: m = "mii"; break;
         case API_PRIVATE: m = "priv"; break;
         case API_WLAN: m = "wlan"; break;
+		case API_IFF: m = "iff"; break;
         default: m = "auto";
     }
     
@@ -763,6 +769,7 @@ void parse_args(int argc, char *argv[]) {
                     case 'p': api_mode = API_PRIVATE; break;
                     case 'w': api_mode = API_WLAN; break;
                     case 'a': api_mode = API_AUTO; break;
+					case 'i': api_mode = API_IFF; break;
                     default:
                         daemon_log(LOG_ERR, "Unknown API mode: %s", optarg);
                         exit(2);

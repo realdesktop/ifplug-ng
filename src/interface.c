@@ -163,6 +163,25 @@ interface_status_t interface_detect_beat_ethtool(int fd, char *iface) {
     return edata.data ? IFSTATUS_UP : IFSTATUS_DOWN;
 }
 
+interface_status_t interface_detect_beat_iff(int fd, char *iface) {
+
+    struct ifreq ifr;
+
+    if (interface_auto_up)
+        interface_up(fd, iface);
+
+    memset(&ifr, 0, sizeof(ifr));
+    strncpy(ifr.ifr_name, iface, sizeof(ifr.ifr_name)-1);
+
+    if (ioctl(fd, SIOCGIFFLAGS, &ifr) == -1) {
+        if (interface_do_message)
+            daemon_log(LOG_ERR, "SIOCGIFFLAGS failed: %s", strerror(errno));
+
+        return IFSTATUS_ERR;
+    }
+
+    return ifr.ifr_flags & IFF_RUNNING ? IFSTATUS_UP : IFSTATUS_DOWN;
+}
 
 static int get_wlan_qual_old(char *iface) {
     FILE *f;
