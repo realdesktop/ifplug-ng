@@ -16,6 +16,8 @@
 # along with ifplugd; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
+sysinitdir = @SYSINITDIR@
+
 noinst_DATA = ifplugd.init ifplugd.action ifplugd.conf
 
 EXTRA_DIST = ifplugd.init.in ifplugd.action ifplugd.conf
@@ -27,9 +29,9 @@ ifplugd.init: ifplugd.init.in Makefile
 	chmod 755 $@
 
 install-data-local: ifplugd.init
-	$(INSTALL) -b -D -m755 ifplugd.init ${DESTDIR}${sysconfdir}/init.d/ifplugd
+	$(INSTALL) -b -D -m755 ifplugd.init ${DESTDIR}${sysinitdir}/ifplugd
 	$(INSTALL) -b -D -m755 $(srcdir)/ifplugd.action ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action
 	$(INSTALL) -b -D -m644 $(srcdir)/ifplugd.conf ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.conf
 
 uninstall-local:
-	rm -f ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.conf ${DESTDIR}${sysconfdir}/init.d/ifplugd
+	rm -f ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.conf ${DESTDIR}${sysinitdir}/ifplugd
