@@ -128,7 +128,7 @@ about the available options.</p>
 
 <p>The network interface which is controlled by <tt>ifplugd</tt>
 should not be configured automatically by your distribution's network
-subsystem, since <tt>ifplugd</tt> will do this for you if needed.
+subsystem, since <tt>ifplugd</tt> will do this for you if needed.</p>
 
 <p>On Debian systems, any interfaces named in ifplugd's
 <tt>INTERFACES</tt> environment variable should not also be listed in
