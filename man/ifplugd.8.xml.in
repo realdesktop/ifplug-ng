@@ -38,13 +38,14 @@
 	  <p>It uses your distribution's native ifup/ifdown programs, but
 		can be configured to do anything you wish when the state of
 		the interface changes. It may ignore short unplugged whiles
-		(<opt>-d</opt> option) or plugged whiles (<opt>-u</opt>
-		option).</p>
+		(<opt>-d</opt> option) or plugged whiles (<opt>-u</opt> option).</p>
 
       <p>ifplugd may be used in "compatibility mode" by specifying -F
       on the command line. Than ifplugd will treat network drivers
       which do not support link beat querying as always online.</p>
-	</description>
+
+
+</description>
 	
 	<options>
 	  
