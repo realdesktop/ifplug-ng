@@ -19,9 +19,11 @@
  */
 
 #include <linux/sockios.h>
+#include <linux/if_ether.h>
 #include <sys/types.h>
+#include <sys/socket.h>
 #include <sys/ioctl.h>
-#include <net/if.h>
+#include <linux/if.h>
 #include <syslog.h>
 #include <string.h>
 #include <errno.h>
@@ -29,15 +31,13 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "ethtool-local.h"
 #include "interface.h"
+#include "wireless.15.h"
 
 #include <libdaemon/dlog.h>
-
-int interface_open(char *iface) {
-    return socket(AF_INET, SOCK_DGRAM, 0);
-}
 
 void interface_up(int fd, char *iface) {
     struct ifreq ifr;
@@ -68,7 +68,6 @@ void interface_up(int fd, char *iface) {
                 daemon_log(LOG_WARNING, "Warning: Could not set interface address.");
         }
     }
-
 
     if (ioctl(fd, SIOCGIFFLAGS, &ifr) < 0) {
         if (interface_do_message)
@@ -164,14 +163,12 @@ interface_status_t interface_detect_beat_ethtool(int fd, char *iface) {
     return edata.data ? IFSTATUS_UP : IFSTATUS_DOWN;
 }
 
-interface_status_t interface_detect_beat_wlan(int fd, char *iface) {
+
+static int get_wlan_qual_old(char *iface) {
     FILE *f;
     char buf[256];
     char *bp;
-    int l;
-    
-    if (interface_auto_up)
-        interface_up(fd, iface);
+    int l, q = -1;
     
     l = strlen(iface);
     
@@ -179,7 +176,7 @@ interface_status_t interface_detect_beat_wlan(int fd, char *iface) {
         if (interface_do_message)
             daemon_log(LOG_WARNING, "Failed to open /proc/net/wireless: %s",strerror(errno));
         
-        return IFSTATUS_ERR;
+        return -1;
     }
     
     while (fgets(buf, sizeof(buf)-1, f)) {
@@ -190,30 +187,93 @@ interface_status_t interface_detect_beat_wlan(int fd, char *iface) {
         
         if(!strncmp(bp, iface, l) && bp[l]==':') {
 
-            /*skip device name */
+            /* skip device name */
             if (!(bp = strchr(bp,' ')))
                 break;
 
             bp++;
             
-            /*skip status*/
+            /* skip status */
             if (!(bp = strchr(bp,' ')))
                 break;
 
-            fclose(f);
-            
-            if (atoi(bp) > 0) 
-                return IFSTATUS_UP;
-            else
-                return IFSTATUS_DOWN;
+            q = atoi(bp);
+            break;
         };
     }
-    
-    if (interface_do_message)
-        daemon_log(LOG_ERR, "Failed to find wireless interface %s\n", iface);
-    
+
     fclose(f);
+
+    if (q < 0) {
+        if (interface_do_message)
+            daemon_log(LOG_ERR, "Failed to find interface in /proc/net/wireless");
+    }
+        
+    return q;
+}
+
+static int get_wlan_qual_new(int fd, char *iface) {
+    struct iwreq req;
+    struct iw_statistics q;
+
+    memset(&req, 0, sizeof(req));
+    strncpy(req.ifr_ifrn.ifrn_name, iface, IFNAMSIZ);
+
+    req.u.data.pointer = (caddr_t) &q;
+    req.u.data.length = sizeof(q);
+    req.u.data.flags = 1;
+
+    if (ioctl(fd, SIOCGIWSTATS, &req) < 0) {
+        if (interface_do_message)
+            daemon_log(LOG_ERR, "Failed to get interface quality: %s\n", strerror(errno));
+        return -1;
+    }
+
+    return q.qual.qual;
+}
+
+
+static int is_assoc_ap(uint8_t mac[ETH_ALEN]) {
+    int b, j;
+    b = 1;
     
-    return IFSTATUS_ERR;
+    for (j = 1; j < ETH_ALEN; j++)
+        if (mac[j] != mac[0]) {
+            b = 0;
+            break;
+        }
+
+    return !b || (mac[0] != 0xFF && mac[0] != 0x44 && mac[0] != 0x00);
+}
+
+interface_status_t interface_detect_beat_wlan(int fd, char *iface) {
+    if (interface_auto_up)
+        interface_up(fd, iface);
+    
+
+    uint8_t mac[6];
+    int q;
+    struct iwreq req;
+
+    memset(&req, 0, sizeof(req));
+    strncpy(req.ifr_ifrn.ifrn_name, iface, IFNAMSIZ);
+     
+    if (ioctl(fd, SIOCGIWAP, &req) < 0) {
+        if (interface_do_message)
+            daemon_log(LOG_WARNING, "Failed to get AP address: %s",strerror(errno));
+        return IFSTATUS_ERR;
+    }
+
+    if (!is_assoc_ap(mac))
+        return IFSTATUS_DOWN;
+
+    if ((q = get_wlan_qual_new(fd, iface)) < 0)
+        if ((q = get_wlan_qual_old(iface)) < 0) {
+            if (interface_do_message)
+                daemon_log(LOG_WARNING, "Failed to get wireless link quality.");
+            return IFSTATUS_ERR;
+        }
+    
+    return q > 0 ? IFSTATUS_UP : IFSTATUS_DOWN;
 }
 

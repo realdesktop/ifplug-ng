@@ -34,6 +34,6 @@ else
     automake -a -c
     autoconf -Wall
 
-    ./configure "$@"
+    ./configure --sysconfdir=/etc "$@"
 fi
 

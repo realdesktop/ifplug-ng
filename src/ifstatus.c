@@ -45,7 +45,7 @@ int handle(char *iface) {
     int fd, r = 0;
     interface_status_t s;
     
-    if ((fd = interface_open(iface)) < 0)
+    if ((fd = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
         return -1;
     
     if (verbose > 0) {
@@ -189,45 +189,32 @@ int main(int argc, char *argv[]) {
         return r+1;
         
     } else {
-        struct ifconf ifconf;
-        struct ifreq *ifr;
-        int m, n, s, fd;
+        FILE *f;
+        char ln[256];
 
-        if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-            fprintf(stderr, "socket(): %s\n", strerror(errno));
+        if (!(f = fopen("/proc/net/dev", "r"))) {
+            fprintf(stderr, "Failed to open /proc/net/dev: %s\n", strerror(errno));
             return 1;
         }
 
-        s = sizeof(struct ifreq)*5;
-        for (;;) {
-            ifr = malloc(s);
+        fgets(ln, sizeof(ln), f);
+        fgets(ln, sizeof(ln), f);
 
-            ifconf.ifc_len = s;
-            ifconf.ifc_req = ifr;
-            
-            if (ioctl(fd, SIOCGIFCONF, &ifconf) < 0) {
-                fprintf(stderr, "SIOCGIFCONF: %s\n", strerror(errno));
-                free(ifr);
-                close(fd);
+        while (fgets(ln, sizeof(ln), f)) {
+            char *p, *e;
+
+            p = ln+strspn(ln, " \t");
+            if (!(e = strchr(p, ':'))) {
+                fprintf(stderr, "Parse failure in /proc/net/dev.\n");
+                fclose(f);
                 return 1;
             }
-                
-            
-            if (ifconf.ifc_len != s)
-                break;
-                
-            free(ifr);
-            s *= 2;
+
+            *e = 0;
+            handle(p);
         }
-
-        close(fd);
         
-        m = ifconf.ifc_len/sizeof(struct ifreq);
-        for (n = 0; n < m; n++)
-            if (strcmp(ifconf.ifc_req[n].ifr_name, "lo"))
-                handle(ifconf.ifc_req[n].ifr_name);
-
-        free(ifr);
+        fclose(f);
     }
     
     return 0;

@@ -19,8 +19,8 @@
 AM_CFLAGS = -DSYSCONFDIR="\"$(sysconfdir)\""
 
 sbin_PROGRAMS = ifplugd ifstatus
-ifplugd_SOURCES = ifplugd.c interface.c interface.h ethtool-kernel.h ethtool-local.h svn-revision.h
-ifstatus_SOURCES = ifstatus.c interface.c interface.h ethtool-kernel.h ethtool-local.h svn-revision.h
+ifplugd_SOURCES = ifplugd.c interface.c interface.h ethtool-kernel.h ethtool-local.h svn-revision.h wireless.15.h ifmonitor.h ifmonitor.c nlapi.h nlapi.c
+ifstatus_SOURCES = ifstatus.c interface.c interface.h ethtool-kernel.h ethtool-local.h svn-revision.h wireless.15.h
 
 MAINTAINERCLEANFILES = svn-revision.h
 

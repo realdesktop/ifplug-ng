@@ -1,7 +1,7 @@
-#ifndef foointerfacehfoo
-#define foointerfacehfoo
+#ifndef foonlapihfoo
+#define foonlapihfoo
 
-/* $Id: interface.h 1.2 Wed, 23 Oct 2002 20:49:08 +0200 lennart $ */
+/* $Id: ifplugd.c 1.12 Sat, 01 Feb 2003 03:00:07 +0100 lennart $ */
 
 /*
  * This file is part of ifplugd.
@@ -21,16 +21,19 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
  */
 
-int interface_auto_up;
-int interface_do_message;
+#include <stdint.h>
+#include <sys/socket.h>
+#include <linux/types.h>
+#include <linux/netlink.h>
+#include <linux/rtnetlink.h>
 
-typedef enum { IFSTATUS_UP, IFSTATUS_DOWN, IFSTATUS_ERR } interface_status_t;
+typedef int (*nlapi_callback_t) (struct nlmsghdr *n, void *u);
 
-void interface_up(int fd, char *iface);
+extern int nlapi_fd;
 
-interface_status_t interface_detect_beat_mii(int fd, char *iface);
-interface_status_t interface_detect_beat_priv(int fd, char *iface);
-interface_status_t interface_detect_beat_ethtool(int fd, char *iface);
-interface_status_t interface_detect_beat_wlan(int fd, char *iface);
+int nlapi_open(uint32_t groups);
+void nlapi_close(void);
+int nlapi_work(int block);
+int nlapi_register(nlapi_callback_t cb, void *u);
 
 #endif
