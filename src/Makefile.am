@@ -16,8 +16,6 @@
 # along with ifplugd; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-MAINTAINERCLEANFILES = svn-revision.h
-
 AM_CFLAGS = -DSYSCONFDIR="\"$(sysconfdir)\""
 
 sbin_PROGRAMS = ifplugd ifstatus
@@ -27,20 +25,27 @@ ifplugd_SOURCES = ifplugd.c \
 			ethtool-kernel.h ethtool-local.h \
 			wireless.h wireless.15.h \
 			ifmonitor.h ifmonitor.c \
-			nlapi.h nlapi.c
+			nlapi.h nlapi.c \
+			svn-revision.h
 
 ifstatus_SOURCES = ifstatus.c \
 			interface.c interface.h \
 			ethtool-kernel.h ethtool-local.h \
-			wireless.h wireless.15.h
+			wireless.h wireless.15.h \
+			svn-revision.h
 
-EXTRA_DIST = svn-revision.h
+MAINTAINERCLEANFILES =
+BUILT_SOURCES =
 
-BUILT_SOURCES = svn-revision.h
+if USE_SUBVERSION
+MAINTAINERCLEANFILES += svn-revision.h
+BUILT_SOURCES += svn-revision.h
+endif
 
 ifstatus.$(OBJEXT): svn-revision.h
 ifplugd.$(OBJEXT): svn-revision.h
 
+if USE_SUBVERSION
 svn-revision.h: Makefile
 	if test -d "$(top_srcdir)/.svn" ; then \
 		if REV=`svn info "$(top_srcdir)" | grep ^Revision | cut -f2 -d" "` 2> /dev/null ; then \
@@ -53,3 +58,5 @@ svnkeywords:
 	svn propset svn:keywords Id *.c *.h Makefile.am
 
 .PHONY: svnkeywords
+endif
+

@@ -20,7 +20,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ(2.57)
-AC_INIT([ifplugd], [0.16], [mzvscyhtq@itaparica.org])
+AC_INIT([ifplugd], [0.17], [mzvscyhtq (at) itaparica (dot) org])
 AC_CONFIG_SRCDIR([src/ifplugd.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])
@@ -28,6 +28,8 @@ AM_INIT_AUTOMAKE([foreign -Wall])
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
+
+AC_SUBST(PACKAGE_URL, [http://0pointer.de/lennart/projects/ifplugd/])
 
 # If using GCC specifiy some additional parameters
 if test "x$GCC" = "xyes" ; then
@@ -62,7 +64,7 @@ AC_C_VOLATILE
 AC_FUNC_FORK
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_SELECT_ARGTYPES
-AC_FUNC_MALLOC
+#AC_FUNC_MALLOC
 AC_TYPE_SIGNAL
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([alarm dup2 memset select setenv socket strchr strdup strerror strrchr strspn])
@@ -105,6 +107,26 @@ if test x$xmltoman = xyes ; then
 fi
 
 AM_CONDITIONAL([USE_XMLTOMAN], [test "x$xmltoman" = xyes])
+
+# subversion release number generation
+AC_ARG_ENABLE(subversion,
+        AC_HELP_STRING([--disable-subversion], [Disable rebuilding of svn-release.h]),
+[case "${enableval}" in
+  yes) subversion=yes ;;
+  no)  subversion=no ;;
+  *) AC_MSG_ERROR([bad value ${enableval} for --disable-subversion]) ;;
+esac],[subversion=yes])
+                                                                                                                                                                                      
+if test x$subversion = xyes ; then
+   AC_CHECK_PROG(have_subversion, svn, yes, no)
+                                                                                                                                                                                      
+   if test x$have_subversion = xno ; then
+     AC_MSG_WARN([*** Not rebuilding svn-release.h as subversion is not found ***])
+     subversion=no
+   fi
+fi
+                                                                                                                                                                                      
+AM_CONDITIONAL([USE_SUBVERSION], [test "x$subversion" = xyes])
 
 AC_CONFIG_FILES([src/Makefile Makefile man/Makefile conf/Makefile doc/Makefile doc/README.html patches/Makefile ifplugd.spec])
 AC_OUTPUT

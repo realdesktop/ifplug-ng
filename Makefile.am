@@ -33,3 +33,9 @@ homepage:
 	cp *.tar.gz $$HOME/homepage/lennart/projects/ifplugd
 	cp doc/README.html doc/style.css doc/NEWS $$HOME/homepage/lennart/projects/ifplugd
 	cp $$HOME/homepage/lennart/projects/ifplugd/README.html $$HOME/homepage/lennart/projects/ifplugd/index.html
+
+
+distcleancheck:
+        @:
+	
+.PHONY: homepage distcleancheck

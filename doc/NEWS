@@ -1,6 +1,12 @@
-0.16 :: ... :: SVN ...
+0.17 :: 13 Sep 2003 :: SVN
+        Init script update
+	compativility fix for gcc 2.95
+
+0.16 :: 13. Aug 2003 :: SVN 31
 	Spec file update
 	Build fixes
+	monitor mode
+	init script update
 
 0.15 :: 10. Jul 2003 :: SVN 16
 	umask fix

@@ -30,8 +30,8 @@
 	<description>
 	  <p>ifplugd.conf is the configuration file for ifplugd. It is a
 	  shell script that is sourced by the init script starting
-	  the daemon. It shall be used to set two environment variables which
-	  are interpreted by the init script.</p>
+	  the daemon. It shall be used to set environment variables which
+	  are interpreted by the init script:</p>
 	</description>
 	
 	<options>
@@ -55,6 +55,12 @@
 		section="8"/> for further information.</p></optdesc>
 	  </option>
 
+
+	  <option>
+	       <p><opt>ARGS_</opt><arg>iface</arg></p>
+                  
+	       <optdesc><p>If specified for an interface this variable takes precedence over ARGS. This may be useful if more than one network device is present.</p></optdesc>
+	  </option>
 	</options>
 	
 	<section name="See also">

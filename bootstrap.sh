@@ -24,7 +24,7 @@ if [ "x$1" = "xam" ] ; then
 else 
     set -ex
 
-    make maintainer-clean || true
+#    make maintainer-clean || true
 
     rm -rf autom4te.cache
     rm -f config.cache
