@@ -97,7 +97,7 @@
 	  <p>ifplugd was written by Lennart Poettering
 		&lt;@PACKAGE_BUGREPORT@&gt;.  ifplugd is available
 		at <url
-		href="http://www.stud.uni-hamburg.de/users/lennart/projects/ifplugd/"/>
+		href="@PACKAGE_URL@"/>
 	  </p>
 	</section>
 	
