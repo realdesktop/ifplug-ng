@@ -24,7 +24,7 @@ sbin_PROGRAMS = ifplugd ifstatus
 ifplugd_SOURCES = ifplugd.c \
 			interface.c interface.h \
 			ethtool-kernel.h ethtool-local.h \
-			wireless.h wireless.15.h \
+			wireless.h wireless.15.h wireless.16.h \
 			ifmonitor.h ifmonitor.c \
 			nlapi.h nlapi.c \
 			svn-revision.h
@@ -32,7 +32,7 @@ ifplugd_SOURCES = ifplugd.c \
 ifstatus_SOURCES = ifstatus.c \
 			interface.c interface.h \
 			ethtool-kernel.h ethtool-local.h \
-			wireless.h wireless.15.h \
+			wireless.h wireless.15.h wireless.16.h \
 			svn-revision.h
 
 MAINTAINERCLEANFILES =
