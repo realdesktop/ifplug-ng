@@ -1,7 +1,8 @@
 <?xml version="1.0" standalone='no'?>
-<!DOCTYPE spec SYSTEM "man.dtd">
+<!DOCTYPE manpage SYSTEM "man.dtd">
+<?xml-stylesheet type="text/xsl" href="man.xsl" ?>
 
-<!-- $Id: ifplugd.conf.5.xml 1.2 Wed, 23 Oct 2002 20:49:08 +0200 lennart $ -->
+<!-- $Id$ -->
 
 <!-- 
   This file is part of ifplugd.

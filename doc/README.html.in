@@ -104,6 +104,8 @@ network is configured.</li>
   
 <h2><a name="documentation">Documentation</a></h2>
 
+<p>Have a look on the man pages <a href="@PACKAGE_URL@ifplugd.8.xml"><tt>ifplugd(8)</tt></a>, <a href="@PACKAGE_URL@ifstatus.8.xml"><tt>ifstatus(8)</tt></a>, <a href="@PACKAGE_URL@ifplugd.conf.5.xml"><tt>ifplugd.conf(5)</tt></a>. (A XSLT capable browser is required)</p>
+
 <h3>Configuration</h3>
 
 <p>Edit <tt>/etc/ifplugd/ifplugd.conf</tt> for configuration

@@ -18,19 +18,33 @@
 
 man_MANS = ifplugd.8 ifplugd.conf.5 ifstatus.8
 
-EXTRA_DIST = $(man_MANS) ifplugd.8.xml.in ifplugd.conf.5.xml.in ifstatus.8.xml.in
+noinst_DATA = ifplugd.8.xml ifplugd.conf.5.xml ifstatus.8.xml  
+
+EXTRA_DIST = $(man_MANS) ifplugd.8.xml.in ifplugd.conf.5.xml.in ifstatus.8.xml.in man.css man.xsl
+
+CLEANFILES = ifplugd.8.xml ifplugd.conf.5.xml ifstatus.8.xml  
+
+ifplugd.8.xml: ifplugd.8.xml.in Makefile
+	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g' -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< > $@
+
+ifplugd.conf.5.xml: ifplugd.conf.5.xml.in Makefile
+	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g'  -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< > $@
+
+ifstatus.8.xml: ifstatus.8.xml.in Makefile
+	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g' -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< > $@
 
 if USE_XMLTOMAN
-
-CLEANFILES = $(man_MANS)
-
-ifplugd.8: ifplugd.8.xml.in Makefile
-	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g' -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< | xmltoman - > $@
-
-ifplugd.conf.5: ifplugd.conf.5.xml.in Makefile
-	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g'  -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< | xmltoman - > $@
-
-ifstatus.8: ifstatus.8.xml.in Makefile
-	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g' -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< | xmltoman - > $@
-
+ 
+CLEANFILES += $(man_MANS)
+  
+ifplugd.8: ifplugd.8.xml Makefile
+	xmltoman $< > $@
+	   
+ifplugd.conf.5: ifplugd.conf.5.xml Makefile
+	xmltoman $< > $@
+	   
+ifstatus.8: ifstatus.8.xml Makefile
+	xmltoman $< > $@
+	   
 endif
+	   

@@ -27,15 +27,15 @@ README:
 	$(MAKE) -C doc README
 	ln -s doc/README README
 
-homepage:
+homepage: all dist
 	test -d $$HOME/homepage/lennart
 	mkdir -p $$HOME/homepage/lennart/projects/ifplugd
 	cp *.tar.gz $$HOME/homepage/lennart/projects/ifplugd
-	cp doc/README.html doc/style.css doc/NEWS $$HOME/homepage/lennart/projects/ifplugd
+	cp man/ifplugd.8.xml man/ifstatus.8.xml man/ifplugd.conf.5.xml man/man.css man/man.xsl doc/README.html doc/style.css doc/NEWS $$HOME/homepage/lennart/projects/ifplugd
 	cp $$HOME/homepage/lennart/projects/ifplugd/README.html $$HOME/homepage/lennart/projects/ifplugd/index.html
 
 
 distcleancheck:
-        @:
+	@:
 	
 .PHONY: homepage distcleancheck

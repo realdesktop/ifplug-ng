@@ -1,7 +1,8 @@
-<?xml version="1.0" standalone='no'?>
-<!DOCTYPE spec SYSTEM "man.dtd">
+<?xml version="1.0"?>
+<!DOCTYPE manpage SYSTEM "man.dtd">
+<?xml-stylesheet type="text/xsl" href="man.xsl" ?>
 
-<!-- $Id: ifstatus.8.xml 1.3 Fri, 25 Oct 2002 21:12:38 +0200 lennart $ -->
+<!-- $Id$ -->
 
 <!-- 
   This file is part of ifplugd.
