@@ -42,15 +42,15 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
-<div class="news-date">Mon Jan 26 2003: </div> <p class="news-text"><a
+<div class="news-date">Tue Feb 10 2004: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.22.tar.gz">Version
-0.22</a> released, changes include: rename <tt>ifstatus</tt> to <tt>ifplugstatus</tt> due to namespace collision</p>
+0.22</a> released, changes include: rename <tt>ifstatus</tt> to <tt>ifplugstatus</tt> due to namespace collision, minor fixes</p>
 
-<div class="news-date">Mon Jan 26 2003: </div> <p class="news-text"><a
+<div class="news-date">Mon Jan 26 2004: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.21b.tar.gz">Version
 0.21b</a> released, added missing file.</p>
 
-<div class="news-date">Mon Jan 26 2003: </div> <p class="news-text"><a
+<div class="news-date">Mon Jan 26 2004: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.21.tar.gz">Version
 0.21</a> released, changes include: better compatibility with wireless devices, compatibility with newer kernels</p>
 
@@ -307,7 +307,7 @@ manpage</p>
 
 <p>Get <tt>ifplugd</tt>'s development sources from the <a href="http://subversion.tigris.org/">Subversion</a> <a href="https://seth.intheinter.net:8081/svn/ifplugd/">repository</a>.</p>
 
-<p>You may find a mostly up to date Debian package of <tt>ifplugd</tt> on the <a href="http://packages.debian.org/ifplugd">Debian package repository</a>.</p>
+<p>You may find an up to date Debian package of <tt>ifplugd</tt> on the <a href="http://packages.debian.org/ifplugd">Debian package repository</a>.</p>
 
 <p>Packages for Mandrake Linux may be found in the Cooker distribution; Gentoo packages are available as well; <a href="http://packman.links2linux.de/">SuSE packages</a> are available courtesy of Herbert Graeber.</p>
 
@@ -316,7 +316,7 @@ manpage</p>
 <p><b>New!</b> There is a joint <tt>ifplugd</tt> and <tt>waproamd</tt> <a href="https://seth.intheinter.net/mailman/listinfo/ifplugd-discuss">mailing list</a> available.</p>
 
 <hr/>
-<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, January 2004</address>
+<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, February 2004</address>
 <div class="grey"><i>$Id$</i></div>
 
 </body>
