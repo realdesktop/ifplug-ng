@@ -448,7 +448,7 @@ void work(void) {
         if (action(status) < 0)
             goto finish;
 
-    if (daemonize && wait_on_fork) {
+    if (send_retval && daemonize && wait_on_fork) {
         char c = status == IFSTATUS_UP ? 2 : (status == IFSTATUS_DOWN ? 3 : 1);
         daemon_retval_send(c);
         send_retval = 0;
@@ -596,7 +596,7 @@ finish:
 		nlapi_close();
 	
     if (send_retval && daemonize && wait_on_fork)
-        daemon_retval_send(1);
+        daemon_retval_send(255);
 
     daemon_pid_file_remove();
     daemon_signal_done();
@@ -918,7 +918,7 @@ int main(int argc, char* argv[]) {
                     kill(pid, SIGTERM);
                 }
             
-			if (c)
+			if (c > 3)
 				daemon_log(LOG_ERR, "Daemon failed with error condition #%i. See syslog for details", c);
 			
             return c;
