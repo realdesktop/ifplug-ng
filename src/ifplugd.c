@@ -1,5 +1,5 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* $Id: ifplugd.c 1.12 Sat, 01 Feb 2003 03:00:07 +0100 lennart $ */
+/* $Id$ */
 
 /*
  * This file is part of ifplugd.
@@ -761,7 +761,7 @@ void parse_args(int argc, char *argv[]) {
                     case 'w': api_mode = API_WLAN; break;
                     case 'a': api_mode = API_AUTO; break;
                     default:
-                        fprintf(stderr, "Unknown API mode: %s\n", optarg);
+                        daemon_log(LOG_ERR, "Unknown API mode: %s\n", optarg);
                         exit(2);
                 }
                 break;
@@ -790,7 +790,7 @@ void parse_args(int argc, char *argv[]) {
 				use_ifmonitor = !use_ifmonitor;
 				break;
             default:
-                fprintf(stderr, "Unknown parameter.\n");
+                daemon_log(LOG_ERR, "Unknown parameter.\n");
                 exit(1);
         }
     }

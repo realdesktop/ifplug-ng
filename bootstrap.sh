@@ -36,4 +36,3 @@ else
 
     ./configure --sysconfdir=/etc "$@"
 fi
-

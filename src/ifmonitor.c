@@ -1,4 +1,4 @@
-/* $Id: ifplugd.c 1.12 Sat, 01 Feb 2003 03:00:07 +0100 lennart $ */
+/* $Id$ */
 
 /*
  * This file is part of ifplugd.
@@ -28,6 +28,8 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include <libdaemon/dlog.h>
+
 #include "nlapi.h"
 
 static int callback(struct nlmsghdr *n, void *u) {
@@ -42,7 +44,7 @@ static int callback(struct nlmsghdr *n, void *u) {
         i = NLMSG_DATA(n);
         
         if (n->nlmsg_len < NLMSG_LENGTH(sizeof(struct ifinfomsg))) {
-            fprintf(stderr, "NETLINK: Packet too small or truncated! (2)\n");
+            daemon_log(LOG_ERR, "NETLINK: Packet too small or truncated! (2)\n");
             return -1;
         }
 

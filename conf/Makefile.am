@@ -27,6 +27,9 @@ ifplugd.init: ifplugd.init.in Makefile
 	chmod 755 $@
 
 install-data-local: ifplugd.init
-	$(INSTALL) -D -m755 ifplugd.init ${DESTDIR}/${sysconfdir}/init.d/ifplugd
-	$(INSTALL) -D -m755 ifplugd.action ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.action
-	$(INSTALL) -D -m644 ifplugd.conf ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.conf
+	$(INSTALL) -b -D -m755 ifplugd.init ${DESTDIR}/${sysconfdir}/init.d/ifplugd
+	$(INSTALL) -b -D -m755 $(srcdir)/ifplugd.action ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.action
+	$(INSTALL) -b -D -m644 $(srcdir)/ifplugd.conf ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.conf
+
+uninstall-local:
+	rm -f ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.conf ${DESTDIR}/${sysconfdir}/init.d/ifplugd

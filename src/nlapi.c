@@ -1,4 +1,4 @@
-/* $Id: ifplugd.c 1.12 Sat, 01 Feb 2003 03:00:07 +0100 lennart $ */
+/* $Id$ */
 
 /*
  * This file is part of ifplugd.
@@ -43,7 +43,7 @@ int nlapi_open(uint32_t groups) {
     struct sockaddr_nl addr;
 
     if ((nlapi_fd = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_ROUTE)) < 0) {
-        fprintf(stderr, "socket(PF_NETLINK): %s\n", strerror(errno));
+        daemon_log(LOG_ERR, "socket(PF_NETLINK): %s\n", strerror(errno));
         return -1;
     }
 
@@ -54,7 +54,7 @@ int nlapi_open(uint32_t groups) {
 
     if (bind(nlapi_fd, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
         close(nlapi_fd);
-        fprintf(stderr, "bind(): %s\n", strerror(errno));
+        daemon_log(LOG_ERR, "bind(): %s\n", strerror(errno));
         return -1;
     }
 
@@ -103,7 +103,6 @@ void nlapi_close(void) {
     if (nlapi_fd >= 0)
         close(nlapi_fd);
     nlapi_fd = -1;
-
 
     while (callbacks) {
         struct callback_info *c = callbacks;

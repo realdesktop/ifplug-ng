@@ -1,4 +1,4 @@
-/* $Id: interface.c 1.4 Thu, 07 Nov 2002 22:27:37 +0100 lennart $ */
+/* $Id$ */
 
 /*
  * This file is part of ifplugd.
@@ -35,7 +35,7 @@
 
 #include "ethtool-local.h"
 #include "interface.h"
-#include "wireless.15.h"
+#include "wireless.h"
 
 #include <libdaemon/dlog.h>
 

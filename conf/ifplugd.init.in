@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # $Id: ifplugd.init 1.6 Sat, 01 Feb 2003 03:00:07 +0100 lennart $
 
 # This file is part of ifplugd.
@@ -59,15 +59,17 @@ fi
 
 case "$1" in
     start)
-        echo -n "Starting ethernet plugging daemon:"
+        echo -n "Starting Network Interface Plugging Daemon:"
         for IF in $INTERFACES ; do
-            $IFPLUGD -i $IF $ARGS
+            A="`eval echo \$\{ARGS_${IF}\}`"
+            [ -z "$A" ] && A="$ARGS"
+            $IFPLUGD -i $IF $A
             echo -n " $IF"
         done
         echo "."
         ;;
     stop)
-        echo -n "Stopping ethernet plugging daemon:"
+        echo -n "Stopping Network Interface Plugging Daemon:"
         for IF in $INTERFACES ; do 
             $IFPLUGD -k -i $IF
             echo -n " $IF"
@@ -80,7 +82,7 @@ case "$1" in
         done
         ;;
     suspend)
-        echo -n "Suspending ethernet plugging daemon:"
+        echo -n "Suspending Network Interface Plugging Daemon:"
         for IF in $INTERFACES ; do
             $IFPLUGD -S -i $IF
             echo -n " $IF"
@@ -88,7 +90,7 @@ case "$1" in
         echo "."    
         ;;
     resume)
-        echo -n "Resuming ethernet plugging daemon:"
+        echo -n "Resuming Network Interface Plugging Daemon:"
         for IF in $INTERFACES ; do
             $IFPLUGD -R -i $IF
             echo -n " $IF"

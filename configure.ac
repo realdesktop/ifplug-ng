@@ -24,7 +24,6 @@ AC_INIT([ifplugd], [0.16], [mzvscyhtq@itaparica.org])
 AC_CONFIG_SRCDIR([src/ifplugd.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])
-AM_MAINTAINER_MODE
 
 # Checks for programs.
 AC_PROG_CXX
@@ -33,6 +32,11 @@ AC_PROG_CC
 # If using GCC specifiy some additional parameters
 if test "x$GCC" = "xyes" ; then
    CFLAGS="$CFLAGS -pipe -Wall"
+fi
+
+if test -d /usr/local/stow ; then
+   AC_MSG_NOTICE([*** Found /usr/local/stow: installing to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
+   AC_PREFIX_DEFAULT([/usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION}])
 fi
 
 AC_PROG_CPP
@@ -61,7 +65,7 @@ AC_FUNC_SELECT_ARGTYPES
 AC_FUNC_MALLOC
 AC_TYPE_SIGNAL
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([alarm dup2 memset select setenv socket strchr strdup strerror strrchr])
+AC_CHECK_FUNCS([alarm dup2 memset select setenv socket strchr strdup strerror strrchr strspn])
 
 # LYNX documentation generation
 AC_ARG_ENABLE(lynx,
