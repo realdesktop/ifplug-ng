@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE manpage SYSTEM "man.dtd">
-<?xml-stylesheet type="text/xsl" href="man.xsl" ?>
+<!DOCTYPE manpage SYSTEM "xmltoman.dtd">
+<?xml-stylesheet type="text/xsl" href="xmltoman.xsl" ?>
 
 <!-- $Id$ -->
 

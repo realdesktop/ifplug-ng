@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8895-15"?> <!-- -*-html-helper-*- -->
+<?xml version="1.0" encoding="iso-8859-1"?> <!-- -*-html-helper-*- -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -42,6 +42,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
+<div class="news-date">Fri Oct 17 2003: </div> <p class="news-text"><a
+href="@PACKAGE_URL@ifplugd-0.18.tar.gz">Version
+0.18</a> released, changes include: Some bugs fixed</p>
+
 <div class="news-date">Fri Sep 13 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.17b.tar.gz">Version
 0.17b</a> released, changes include: typo and date fix</p>
@@ -70,10 +74,10 @@ suspending/resuming, many fixes</p>
 configure your ethernet device when a cable is plugged in and
 automatically unconfigure it if the cable is pulled. This is useful on
 laptops with onboard network adapters, since it will only configure
-the interface when a cable is really connected.
+the interface when a cable is really connected.</p>
 
-<p><tt>ifplugd</tt> is a rather simplistic approach to this target since it relies
-on your distribution's native interface configuration system.</p>
+<p><tt>ifplugd</tt> ifplugd interfaces with your distribution's native network
+  configuration utilities.</p>
 
 <p>Some features:</p>
 
@@ -89,11 +93,12 @@ on your distribution's native interface configuration system.</p>
 
   <li>Syslog support</li>
 
-  <li>Simplistic C source code, just 19k binary (+11k for libdaemon)</li>
+  <li>Small program - the binary is just 19 KB (plus 11 KB for <tt>libdaemon</tt>).</li>
   
   <li>Multiple ethernet interface support</li>
 
-  <li>May ignore short unplugged whiles (<tt>-d</tt> option) or plugged whiles (<tt>-u</tt>
+  <li>Can be configured to ignore short "unplugged" periods
+  (-d option) or short "plugged" periods(<tt>-u</tt>
   option)</li>
 
   <li>Support for wireless networking. Whenever an AP is detected the
@@ -104,17 +109,17 @@ network is configured.</li>
   
 <h2><a name="status">Status</a></h2>
 
-<p>Version 0.14 is stable and has all the sensible features its users could think of.</p>
+<p>Version @PACKAGE_VERSION@ is stable and has all the sensible features its users could think of.</p>
   
 <h2><a name="documentation">Documentation</a></h2>
 
-<p>Have a look on the man pages <a href="@PACKAGE_URL@ifplugd.8.xml"><tt>ifplugd(8)</tt></a>, <a href="@PACKAGE_URL@ifstatus.8.xml"><tt>ifstatus(8)</tt></a>, <a href="@PACKAGE_URL@ifplugd.conf.5.xml"><tt>ifplugd.conf(5)</tt></a>. (A XSLT capable browser is required)</p>
+<p>Have a look on the man pages <a href="@PACKAGE_URL@ifplugd.8.xml"><tt>ifplugd(8)</tt></a>, <a href="@PACKAGE_URL@ifstatus.8.xml"><tt>ifstatus(8)</tt></a>, <a href="@PACKAGE_URL@ifplugd.conf.5.xml"><tt>ifplugd.conf(5)</tt></a>. (An XSLT capable browser is required)</p>
 
 <h3>Configuration</h3>
 
 <p>Edit <tt>/etc/ifplugd/ifplugd.conf</tt> for configuration
 changes. This file is a bourne shell script sourced by the init script
-and used to generate a suiting command line. You may specify more than
+and used to start <tt>ifplugd</tt> with appropriate arguments. You may specify more than
 one ethernet interface in <tt>INTERFACES</tt>. For each interface a
 seperate instance of <tt>ifplugd</tt> is spawned. The arguments specified in
 <tt>ARGS</tt> are append to <tt>ifplugd</tt>'s command line. Have a look on
@@ -123,10 +128,11 @@ about the available options.</p>
 
 <p>The network interface which is controlled by <tt>ifplugd</tt>
 should not be configured automatically by your distribution's network
-subsystem, since <tt>ifplugd</tt> will do this for you if needed. On
-Debian remove interface names beginning with <tt>eth</tt> or
-<tt>wlan</tt> from the <tt>auto</tt> option line in
-<tt>/etc/network/interfaces</tt>.</p>
+subsystem, since <tt>ifplugd</tt> will do this for you if needed.
+
+<p>On Debian systems, any interfaces named in ifplugd's
+<tt>INTERFACES</tt> environment variable should not also be listed in
+an "auto" stanza in <tt>/etc/network/interfaces</tt>.</p>
 
 <h3>Troubleshooting</h3>
 
@@ -147,11 +153,11 @@ detect the network cable for a short period of time before and after
 the suspend. When using the <tt>-f</tt> switch, this will be treated
 as "no link beat", thus the network is shutdown after a
 timeout. During this timeout the machine changes to suspended
-state. When it is resumed again, the timeout will be run out, the
-network is deconfigured, however, as the next cable detection
-succeeds, the network is configured again immediately. To fix this
-problem, <tt>ifplugd</tt> should be disabled before the APM suspend
-and enabled back after the suspend. This may be done by using
+state. When it is resumed again, the timeout period will have expired
+and so the network is deconfigured, however, as the next cable
+detection succeeds, the network is configured again immediately. To
+fix this problem, <tt>ifplugd</tt> should be disabled before the APM
+suspend and enabled back after the suspend. This may be done by using
 <tt>apmd</tt> and adding a script to
 <tt>/etc/apm/{suspend,resume}.d</tt> which simply calls
 <tt>/etc/init.d/ifplugd suspend</tt>, resp. <tt>/etc/init.d/ifplugd
@@ -213,8 +219,13 @@ exist on
   <li><p><b>Q:</b> There are already <tt>laptop-net</tt>'s <tt>ifd</tt> and <tt>miid</tt>, why did you write
   your own daemon?</p>
 
-  <p><b>A:</b> <tt>laptop-net</tt> simply sucks and I didn't know of <tt>miid</tt> when I wrote
-  <tt>ifplugd</tt>. However, <tt>ifplugd</tt> is far better than <tt>miid</tt>. For a
+  <p><b>A:</b> <tt>laptop-net</tt> was too integrated with its profile
+system and didn't work on my hardware when I had a look on it. It
+seemed easier to me to write a simple but feature complete replacement
+than using laptop-net without most of the special features disabled. I
+didn't know about <tt>miid</tt> when I wrote
+  <tt>ifplugd</tt>, but in any case <tt>ifplugd</tt> is much better
+than <tt>miid</tt>. For a
      comparison of <tt>miid</tt> and <tt>ifplugd</tt>, have a look on
 
   <a href="http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=162763&amp;repeatmerged=yes">http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=162763&amp;repeatmerged=yes</a></p></li>
@@ -260,7 +271,7 @@ on their source codes for learning how to use the link beat ioctls.</p>
 <p>Oliver Kurth for packaging <tt>ifplugd</tt> for Debian and <tt>ifplugd</tt>'s
 manpage</p>
 
-<p>Asgeir Nilsen, Sean Reifschneider, R. Steve McKown, David Mitchell for patches</p>
+<p>Thomas Hood, Asgeir Nilsen, Sean Reifschneider, R. Steve McKown, David Mitchell for patches</p>
 
 <p>Frederic Lepied for integrating <tt>ifplugd</tt> into Mandrake Linux</p>
 
@@ -277,7 +288,7 @@ manpage</p>
 <p>Packages for Mandrake Linux may be found in the Cooker distribution; Gentoo packages are available as well</p>
 
 <hr/>
-<address>Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, July 2003</address>
+<address>Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, October 2003</address>
 <div><i>$Id$</i></div>
 
 </body>

@@ -221,8 +221,6 @@ int action(interface_status_t status) {
                 daemon_log(LOG_WARNING, "Killing child.");
                 kill(pid, SIGTERM);
             }
-                
-            break;
         }
         
     }
@@ -579,7 +577,7 @@ void work(void) {
     }
 
 cleanup:
-    if (!no_shutdown_script && status == IFSTATUS_UP) {
+	if (!no_shutdown_script && (status == IFSTATUS_UP || (status == IFSTATUS_DOWN && t))) {
         setenv(IFPLUGD_ENV_PREVIOUS, strstatus(status), 1);
         setenv(IFPLUGD_ENV_CURRENT, strstatus(-1), 1);
         action(IFSTATUS_DOWN);
@@ -833,12 +831,13 @@ void parse_args(int argc, char *argv[]) {
     if (_check) {
         pid_t pid = daemon_pid_file_is_running();
 
-        if (pid == (pid_t) -1)
+        if (pid == (pid_t) -1 || pid == 0) {
             printf("ifplugd not running.\n");
-        else
+			exit(255);
+		} else {
             printf("ifplugd process for device %s running as pid %u.\n", interface, pid);
-        
-        exit(pid == 0 ? 255 : 0);
+			exit(0);
+		}
     }
     
 }
