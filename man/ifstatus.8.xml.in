@@ -22,14 +22,14 @@
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA. 
 -->
 
-  <manpage name="ifstatus" section="8" desc="A link beat detection tool">
+  <manpage name="ifplugstatus" section="8" desc="A link beat detection tool">
 
 	<synopsis>
-	  <cmd>ifstatus [<arg>options</arg>] [<arg>INTERFACE</arg>]</cmd>
+	  <cmd>ifplugstatus [<arg>options</arg>] [<arg>INTERFACE</arg>]</cmd>
 	</synopsis>
 	
 	<description>
-	  <p>ifstatus is an utility which may be used to detect the link
+	  <p>ifplugstatus is an utility which may be used to detect the link
 	  status of a local Linux ethernet device, much in the same way
 	  mii-diag, mii-tool and ethtool work. In fact it supports all
 	  three different APIs these three tools use. Thus, it provides
@@ -44,7 +44,7 @@
 	<options>
 
 	  <p>You may speicify an ethernet device on the command
-	  line. Otherwise ifstatus will check for eth0..eth9
+	  line. Otherwise ifplugstatus will check for eth0..eth9
 	  automatically.</p>
 	  
 	  <option>
@@ -105,7 +105,7 @@
 	<section name="See also">
 	  <p>
 		<manref name="mii-diag" section="8"/>, <manref name="mii-tool"
-		  section="8"/>, <manref name="ethtool" section="8"/>
+		  section="8"/>, <manref name="ethtool" section="8"/>, <manref name="ifplugd" section="8"/>
 	  </p>
 	</section>
 	

@@ -19,7 +19,7 @@
 AM_CFLAGS = $(LIBDAEMON_CFLAGS) -DSYSCONFDIR="\"$(sysconfdir)\""
 LDADD = $(LIBDAEMON_LIBS)
 
-sbin_PROGRAMS = ifplugd ifstatus
+sbin_PROGRAMS = ifplugd ifplugstatus
 
 ifplugd_SOURCES = ifplugd.c \
 			interface.c interface.h \
@@ -29,7 +29,7 @@ ifplugd_SOURCES = ifplugd.c \
 			nlapi.h nlapi.c \
 			svn-revision.h
 
-ifstatus_SOURCES = ifstatus.c \
+ifplugstatus_SOURCES = ifplugstatus.c \
 			interface.c interface.h \
 			ethtool-kernel.h ethtool-local.h \
 			wireless.h wireless.15.h wireless.16.h \

@@ -20,7 +20,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ(2.59)
-AC_INIT([ifplugd],[0.21b],[mzvscyhtq (at) 0pointer (dot) de])
+AC_INIT([ifplugd],[0.22],[mzvscyhtq (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/ifplugd.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])

@@ -47,9 +47,9 @@ make DESTDIR=$RPM_BUILD_ROOT PREFIX=%{prefix} install
 %doc LICENSE README
 %doc doc/README.html doc/style.css
 %{_sbindir}/ifplugd
-%{_sbindir}/ifstatus
+%{_sbindir}/ifplugstatus
 %{_mandir}/man?/ifplugd*
-%{_mandir}/man?/ifstatus*
+%{_mandir}/man?/ifplugstatus*
 %{_sysconfdir}/init.d/ifplugd
 %config %{_sysconfdir}/ifplugd/ifplugd.conf
 %config %{_sysconfdir}/ifplugd/ifplugd.action

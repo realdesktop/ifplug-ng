@@ -280,7 +280,7 @@
 	<section name="See also">
 	  <p>
 		<manref name="ifplugd.conf" section="5"/>, <manref name="ifup" section="8"/>, <manref name="interfaces"
-		  section="5"/>, <manref name="ifconfig" section="8"/>
+		  section="5"/>, <manref name="ifconfig" section="8"/>, <manref name="ifplugstatus" section="8"/>
 	  </p>
 	</section>
 	

@@ -16,13 +16,13 @@
 # along with ifplugd; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-man_MANS = ifplugd.8 ifplugd.conf.5 ifstatus.8
+man_MANS = ifplugd.8 ifplugd.conf.5 ifplugstatus.8
 
-noinst_DATA = ifplugd.8.xml ifplugd.conf.5.xml ifstatus.8.xml  
+noinst_DATA = ifplugd.8.xml ifplugd.conf.5.xml ifplugstatus.8.xml  
 
-EXTRA_DIST = $(man_MANS) ifplugd.8.xml.in ifplugd.conf.5.xml.in ifstatus.8.xml.in xmltoman.css xmltoman.xsl xmltoman.dtd
+EXTRA_DIST = $(man_MANS) ifplugd.8.xml.in ifplugd.conf.5.xml.in ifplugstatus.8.xml.in xmltoman.css xmltoman.xsl xmltoman.dtd
 
-CLEANFILES = ifplugd.8.xml ifplugd.conf.5.xml ifstatus.8.xml  
+CLEANFILES = ifplugd.8.xml ifplugd.conf.5.xml ifplugstatus.8.xml  
 
 ifplugd.8.xml: ifplugd.8.xml.in Makefile
 	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g' -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< > $@
@@ -30,7 +30,7 @@ ifplugd.8.xml: ifplugd.8.xml.in Makefile
 ifplugd.conf.5.xml: ifplugd.conf.5.xml.in Makefile
 	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g'  -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< > $@
 
-ifstatus.8.xml: ifstatus.8.xml.in Makefile
+ifplugstatus.8.xml: ifplugstatus.8.xml.in Makefile
 	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' -e 's,@PACKAGE_BUGREPORT\@,$(PACKAGE_BUGREPORT),g' -e 's,@PACKAGE_URL\@,$(PACKAGE_URL),g' $< > $@
 
 if USE_XMLTOMAN
@@ -43,7 +43,7 @@ ifplugd.8: ifplugd.8.xml Makefile
 ifplugd.conf.5: ifplugd.conf.5.xml Makefile
 	xmltoman $< > $@
 
-ifstatus.8: ifstatus.8.xml Makefile
+ifplugstatus.8: ifplugstatus.8.xml Makefile
 	xmltoman $< > $@
 
 endif

@@ -93,7 +93,7 @@ int handle(char *iface) {
 
             default:
                 if (!verbose)
-                    printf("%s: not supported\n", iface);
+                    printf("%s: not supported%s\n", iface, getuid() != 0 ? " (Retry as root?)" : "");
                 
                 r = -1;
                 break;
@@ -152,9 +152,9 @@ void parse(int argc, char *argv[]) {
                 break;
             case 'V':
 #ifdef SVN_REVISION
-		 printf("ifstatus "VERSION" (SVN: "SVN_REVISION")\n");
+		 printf("ifplugstatus "VERSION" (SVN: "SVN_REVISION")\n");
 #else
-		 printf("ifstatus "VERSION"\n");
+		 printf("ifplugstatus "VERSION"\n");
 #endif
                 exit(0);
             default:

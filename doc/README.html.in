@@ -43,6 +43,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 <h2><a name="news">News</a></h2>
 
 <div class="news-date">Mon Jan 26 2003: </div> <p class="news-text"><a
+href="@PACKAGE_URL@ifplugd-0.22.tar.gz">Version
+0.22</a> released, changes include: rename <tt>ifstatus</tt> to <tt>ifplugstatus</tt> due to namespace collision</p>
+
+<div class="news-date">Mon Jan 26 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.21b.tar.gz">Version
 0.21b</a> released, added missing file.</p>
 
@@ -131,7 +135,7 @@ if you need a facility to configure WEP keys before AP associations succeed.</li
   
 <h2><a name="documentation">Documentation</a></h2>
 
-<p>Have a look on the man pages <a href="@PACKAGE_URL@ifplugd.8.xml"><tt>ifplugd(8)</tt></a>, <a href="@PACKAGE_URL@ifstatus.8.xml"><tt>ifstatus(8)</tt></a>, <a href="@PACKAGE_URL@ifplugd.conf.5.xml"><tt>ifplugd.conf(5)</tt></a>. (An XSLT capable browser is required)</p>
+<p>Have a look on the man pages <a href="@PACKAGE_URL@ifplugd.8.xml"><tt>ifplugd(8)</tt></a>, <a href="@PACKAGE_URL@ifplugstatus.8.xml"><tt>ifplugstatus(8)</tt></a>, <a href="@PACKAGE_URL@ifplugd.conf.5.xml"><tt>ifplugd.conf(5)</tt></a>. (An XSLT capable browser is required)</p>
 
 <h3>Configuration</h3>
 
@@ -291,7 +295,7 @@ on their source codes for learning how to use the link beat ioctls.</p>
 <p>Oliver Kurth for packaging <tt>ifplugd</tt> for Debian and <tt>ifplugd</tt>'s
 manpage</p>
 
-<p>Thomas Hood, Asgeir Nilsen, Sean Reifschneider, R. Steve McKown, David Mitchell, Norbert Preining for patches</p>
+<p>Thomas Hood, Asgeir Nilsen, Sean Reifschneider, R. Steve McKown, David Mitchell, Norbert Preining, Herbert Graeber for patches</p>
 
 <p>Frederic Lepied for integrating <tt>ifplugd</tt> into Mandrake Linux</p>
 
