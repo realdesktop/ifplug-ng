@@ -1,3 +1,7 @@
+0.20 :: 9 Nov 2003 :: SVN 69
+	Error output fix
+	Build system fix
+
 0.19 :: 20 Oct 2003 :: SVN 62
 	--wait-for-kill fix
 	minor documentation updates, other fixes
