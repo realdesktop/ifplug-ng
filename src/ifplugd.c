@@ -77,9 +77,7 @@ int daemonize = 1,
 	use_beep = 1,
 	no_shutdown_script = 0,
 	wait_on_fork = 0,
-#ifdef DAEMON_PID_FILE_KILL_WAIT_AVAILABLE        
 	wait_on_kill = 0,
-#endif
 	use_syslog = 1,
 	ignore_retval = 0,
 	initial_down = 0,
@@ -636,9 +634,7 @@ void usage(char *p) {
            "   -q --no-shutdown          Don't run script on daemon quit (%s)\n"
 		   "   -l --initial-down         Run \"down\" script on startup if now cable is detected (%s)\n"
            "   -w --wait-on-fork         Wait until daemon fork finished (%s)\n"
-#ifdef DAEMON_PID_FILE_KILL_WAIT_AVAILABLE        
 		   "   -W --wait-on-kill         When run with -k, wait until the daemon died (%s)\n"
-#endif		   
 		   "   -x --extra-arg            Specify an extra argument for action script\n"
 		   "   -M --monitor              Use interface monitoring (%s)\n"
            "   -h --help                 Show this help\n"
@@ -665,9 +661,7 @@ void usage(char *p) {
            no_shutdown_script ? "on" : "off",
 		   initial_down ? "on" : "off",
            wait_on_fork ? "on" : "off",
-#ifdef DAEMON_PID_FILE_KILL_WAIT_AVAILABLE        
 		   wait_on_kill ? "on" : "off",
-#endif
 		   use_ifmonitor ? "on" : "off");
 }
 
@@ -687,9 +681,7 @@ void parse_args(int argc, char *argv[]) {
         {"delay-down",           required_argument, 0, 'd'},
         {"api-mode",             required_argument, 0, 'm'},
         {"wait-on-fork",         no_argument, 0, 'w'},
-#ifdef DAEMON_PID_FILE_KILL_WAIT_AVAILABLE
 		{"wait-on-kill",         no_argument, 0, 'W'},
-#endif
         {"no-shutdown",          no_argument, 0, 'q'},
         {"help",                 no_argument, 0, 'h'},
         {"kill",                 no_argument, 0, 'k'},
@@ -785,11 +777,9 @@ void parse_args(int argc, char *argv[]) {
             case 'w':
                 wait_on_fork = !wait_on_fork;
                 break;
-#ifdef DAEMON_PID_FILE_KILL_WAIT_AVAILABLE
             case 'W':
                 wait_on_kill = !wait_on_kill;
                 break;
-#endif
 			case 'x':
                 extra_arg = strdup(optarg);
                 break;
@@ -827,11 +817,9 @@ void parse_args(int argc, char *argv[]) {
     if (_kill || _resume || _suspend || _info) {
 		int rv;
 		
-#ifdef DAEMON_PID_FILE_KILL_WAIT_AVAILABLE
 		if (_kill && wait_on_kill)
 			rv = daemon_pid_file_kill_wait(SIGINT, 5);
 		else
-#endif
 			rv = daemon_pid_file_kill(_kill ? SIGINT : (_resume ? SIGUSR2 : (_info ? SIGHUP : SIGUSR1)));
 
 		if (rv < 0) {

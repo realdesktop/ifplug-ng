@@ -21,7 +21,11 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
  */
 
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <linux/if.h>
-#include "wireless.15.h"
+#include <net/if_arp.h>
+
+#include "wireless.16.h"
 
 #endif

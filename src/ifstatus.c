@@ -1,4 +1,4 @@
-/* $Id: ifstatus.c 1.3 Wed, 13 Nov 2002 22:37:54 +0100 lennart $ */
+/* $Id$ */
 
 /*
  * This file is part of ifplugd.

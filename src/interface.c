@@ -215,6 +215,7 @@ static int get_wlan_qual_old(char *iface) {
 static int get_wlan_qual_new(int fd, char *iface) {
     struct iwreq req;
     struct iw_statistics q;
+    static struct iw_range range;
 
     memset(&req, 0, sizeof(req));
     strncpy(req.ifr_ifrn.ifrn_name, iface, IFNAMSIZ);
@@ -229,7 +230,26 @@ static int get_wlan_qual_new(int fd, char *iface) {
         return -1;
     }
 
-    return q.qual.qual;
+    memset(&req, 0, sizeof(req));
+    strncpy(req.ifr_ifrn.ifrn_name, iface, IFNAMSIZ);
+
+    memset(&range, 0, sizeof(struct iw_range));
+    req.u.data.pointer = (caddr_t) &range;
+    req.u.data.length = sizeof(struct iw_range);
+    req.u.data.flags = 0;
+     
+    if (ioctl(fd, SIOCGIWRANGE, &req) < 0) {
+        if (interface_do_message)
+            daemon_log(LOG_ERR, "SIOCGIWRANGE failed: %s\n", strerror(errno));
+        return -1;
+    }
+    
+    /* Test if both qual and level are on their lowest level */
+    if (q.qual.qual <= 0 &&
+        (q.qual.level > range.max_qual.level ? q.qual.level <= 156 : q.qual.level <= 0))
+        return 0;
+
+    return 1;
 }
 
 
@@ -272,6 +292,7 @@ interface_status_t interface_detect_beat_wlan(int fd, char *iface) {
         if ((q = get_wlan_qual_old(iface)) < 0) {
             if (interface_do_message)
                 daemon_log(LOG_WARNING, "Failed to get wireless link quality.");
+            
             return IFSTATUS_ERR;
         }
     
