@@ -29,7 +29,7 @@
       <title>
         <xsl:value-of select="@name"/>(<xsl:value-of select="@section"/>) 
       </title>
-      <link rel="stylesheet" type="text/css" href="man.css"/>
+      <link rel="stylesheet" type="text/css" href="xmltoman.css"/>
     </head>
     <body>
       <h1>Name</h1>
