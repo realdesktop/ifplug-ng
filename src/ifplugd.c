@@ -165,7 +165,7 @@ int action(interface_status_t status) {
         if (_pipe[1] > 2)
             close(_pipe[1]);
 
-	umask(0022); // Set up a sane umask
+		umask(0022); /* Set up a sane umask */
         
         execl(run, run, interface, arg, extra_arg, 0);
 
@@ -388,7 +388,6 @@ void work(void) {
 
     daemon_log(LOG_INFO, "ifplugd "VERSION" initializing%s.", use_ifmonitor ? ", using NETLINK device monitoring" : "");
 
-	
     if (daemon_pid_file_create() < 0) {
         daemon_log(LOG_ERR, "Could not create PID file %s.", daemon_pid_file_proc());
         goto finish;
@@ -773,7 +772,7 @@ void parse_args(int argc, char *argv[]) {
                     case 'w': api_mode = API_WLAN; break;
                     case 'a': api_mode = API_AUTO; break;
                     default:
-                        daemon_log(LOG_ERR, "Unknown API mode: %s\n", optarg);
+                        daemon_log(LOG_ERR, "Unknown API mode: %s", optarg);
                         exit(2);
                 }
                 break;
@@ -807,7 +806,7 @@ void parse_args(int argc, char *argv[]) {
 				use_ifmonitor = !use_ifmonitor;
 				break;
             default:
-                daemon_log(LOG_ERR, "Unknown parameter.\n");
+                daemon_log(LOG_ERR, "Unknown parameter.");
                 exit(1);
         }
     }
