@@ -94,7 +94,6 @@ fi
 AC_MSG_NOTICE([Init sript will be installed in $SYSINITDIR])
 AC_SUBST(SYSINITDIR)
 
-
 # LYNX documentation generation
 AC_ARG_ENABLE(lynx,
         AC_HELP_STRING([--disable-lynx], [Turn off lynx usage for documentation generation]),
