@@ -18,7 +18,7 @@ tulip    | k2.4.18              | works; does it work with -a???
 hostap   | d0.0.3               | Works, even with -a
 
 Please help me to extend this list and send me
-(mzvscyhtq [at] itaparica.org) more information about your
+(mzvscyhtq (at) 0pointer (dot) de) more information about your
 experience with drivers not included in the list above yet.
 
-$Id: SUPPORTED_DRIVERS 1.4 Sat, 01 Feb 2003 02:36:25 +0100 lennart $
+$Id$
