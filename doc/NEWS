@@ -1,3 +1,6 @@
+0.17b :: 13 Sep 2003 :: SVN 43
+	Fixed some typos
+
 0.17 :: 13 Sep 2003 :: SVN 42
         Init script update
 	compativility fix for gcc 2.95
@@ -96,4 +99,4 @@
 0.1 :: 29. Sept. 2002
         Initial version
 
-$Id: NEWS 1.23 Sat, 01 Feb 2003 03:03:31 +0100 lennart $
+$Id$

@@ -1,7 +1,7 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# $Id: Makefile.am 22 2003-06-15 16:36:33Z lennart $
+# $Id$
 
 # This file is part of ifplugd.
 #
@@ -20,7 +20,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ(2.57)
-AC_INIT([ifplugd], [0.17], [mzvscyhtq (at) 0pointer (dot) de])
+AC_INIT([ifplugd], [0.17b], [mzvscyhtq (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/ifplugd.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])
