@@ -43,9 +43,8 @@
 	
 	<options>
 
-	  <p>You may speicify an ethernet device on the command
-	  line. Otherwise ifplugstatus will check for eth0..eth9
-	  automatically.</p>
+	  <p>You may specify an ethernet device on the command
+	  line. Otherwise ifplugstatus will check all available network interfaces.</p>
 	  
 	  <option>
 		<p><opt>-a | --auto</opt></p>
