@@ -1,4 +1,4 @@
-# $Id: Makefile.am 22 2003-06-15 16:36:33Z lennart $
+# $Id$
 
 # This file is part of ifplugd.
 #

@@ -20,7 +20,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ(2.57)
-AC_INIT([ifplugd], [0.18], [mzvscyhtq (at) 0pointer (dot) de])
+AC_INIT([ifplugd], [0.19], [mzvscyhtq (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/ifplugd.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])
@@ -48,6 +48,7 @@ AC_PROG_MAKE_SET
 
 # Checks for libraries.
 AC_CHECK_LIB([daemon], [daemon_fork],, [AC_MSG_ERROR([*** Sorry, you have to install libdaemon ***])])
+AC_CHECK_LIB([daemon], [daemon_pid_file_kill_wait],, [AC_MSG_WARN([*** libdaemon too old, --wait-on-kill is not going to be supported. Consider updating to libdaemon 0.3. ***])])
 
 # Checks for header files.
 AC_HEADER_STDC

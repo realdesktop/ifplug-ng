@@ -42,6 +42,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
+<div class="news-date">Mon Oct 20 2003: </div> <p class="news-text"><a
+href="@PACKAGE_URL@ifplugd-0.19.tar.gz">Version
+0.19</a> released, changes include: New option <tt>--wait-for-kill</tt>, this requires <a href="http://0pointer.de/lennart/projects/libdaemon/"><tt>libdaemon 0.3</tt></a></p>
+
 <div class="news-date">Fri Oct 17 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.18.tar.gz">Version
 0.18</a> released, changes include: Some bugs fixed</p>
@@ -101,8 +105,10 @@ the interface when a cable is really connected.</p>
   (-d option) or short "plugged" periods(<tt>-u</tt>
   option)</li>
 
-  <li>Support for wireless networking. Whenever an AP is detected the
-network is configured.</li>
+  <li>Support for wireless networking. Whenever an association to an
+AP is detected the network is configured. Have a look on <a
+href="http://0pointer.de/lennart/projects/waproamd/"><tt>waproamd</tt></a>
+if you need a facility to configure WEP keys before AP associations succeed.</li>
 
   <li>Compatibility mode for network devices which do not support cable detection (<tt>-F</tt> option)</li>
 </ul>

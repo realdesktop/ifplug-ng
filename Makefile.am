@@ -37,5 +37,5 @@ homepage: all dist
 
 distcleancheck:
 	@:
-	
+
 .PHONY: homepage distcleancheck

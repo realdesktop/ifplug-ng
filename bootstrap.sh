@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: bootstrap.sh 20 2003-07-10 16:21:55Z lennart $
+# $Id$
 
 # This file is part of ifplugd.
 #
@@ -23,8 +23,6 @@ if [ "x$1" = "xam" ] ; then
     ./config.status
 else 
     set -ex
-
-#    make maintainer-clean || true
 
     rm -rf autom4te.cache
     rm -f config.cache
