@@ -108,7 +108,7 @@
 	  <option>
 		<p><opt>-I | --ignore-retval</opt></p>
 		<optdesc><p>
-			Don't exit on nonzero return value of program execute don link change. (default: off)
+			Don't exit on nonzero return value of program executed on link change. (default: off)
 		  </p></optdesc>
 	  </option>
 
