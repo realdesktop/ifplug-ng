@@ -804,7 +804,6 @@ void parse_args(int argc, char *argv[]) {
 
 	if (!interface)
 		interface = strdup("eth0");
-	
     if (!use_syslog)
         daemon_log_use = DAEMON_LOG_STDERR;
     
