@@ -143,6 +143,13 @@
 	  </option>
 	  
 	  <option>
+		<p><opt>-p | --no-startup</opt></p>
+		<optdesc><p>
+			Don't call the script to bring up network on deamon start (default: off)
+		  </p></optdesc>
+	  </option>
+	  
+	  <option>
 		<p><opt>-q | --no-shutdown</opt></p>
 		<optdesc><p>
 			Don't call the script for network shutdown on deamon quit (default: off)

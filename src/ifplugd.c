@@ -61,25 +61,26 @@
 #define IFPLUGD_ENV_CURRENT "IFPLUGD_CURRENT"
 
 int interface_auto_up = 1,
-	interface_do_message = 1;
+    interface_do_message = 1;
 
 char *interface = NULL;
 char *run = SYSCONFDIR"/ifplugd/ifplugd.action";
 char *extra_arg = NULL;
 
 int polltime = 1,
-	delay_up = 0,
-	delay_down = 5;
+    delay_up = 0,
+    delay_down = 5;
 
 int daemonize = 1,
-	use_beep = 1,
-	no_shutdown_script = 0,
-	wait_on_fork = 0,
-	wait_on_kill = 0,
-	use_syslog = 1,
-	ignore_retval = 0,
-	initial_down = 0,
-	use_ifmonitor = 0;
+    use_beep = 1,
+    no_startup_script = 0,
+    no_shutdown_script = 0,
+    wait_on_fork = 0,
+    wait_on_kill = 0,
+    use_syslog = 1,
+    ignore_retval = 0,
+    initial_down = 0,
+    use_ifmonitor = 0;
 
 int disabled = 0;
 
@@ -161,7 +162,7 @@ int action(interface_status_t status) {
         if (_pipe[1] > 2)
             close(_pipe[1]);
 
-		umask(0022); /* Set up a sane umask */
+        umask(0022); /* Set up a sane umask */
         
         execl(run, run, interface, arg, extra_arg, (char *) NULL);
 
@@ -294,9 +295,9 @@ interface_status_t detect_beat(int fd, char*iface) {
     interface_status_t status;
     static interface_status_t last_status = (interface_status_t) -1;
 
-	if (disabled)
-		return IFSTATUS_DOWN;
-	
+    if (disabled)
+        return IFSTATUS_DOWN;
+    
     if ((status = detect_beat_func(fd, iface)) == IFSTATUS_ERR)
         status = failure_status;
 
@@ -339,19 +340,19 @@ int welcome_iface(int fd, char *iface) {
     else
         daemon_log(LOG_INFO, "%s", txt);
 
-	cached_detect_beat_func = NULL;
-	
+    cached_detect_beat_func = NULL;
+    
     return 0;
 }
 
 int ifmonitor_cb(int b, int index, unsigned short type, const char *name) {
-	if (!name)
-		return 0;
+    if (!name)
+        return 0;
 
-	if (!strcmp(name, interface))
-		disabled = !b;
+    if (!strcmp(name, interface))
+        disabled = !b;
 
-	return 0;
+    return 0;
 }
 
 int is_iface_available(int s, char *p) {
@@ -399,7 +400,7 @@ void work(void) {
         case API_MII: detect_beat_func = interface_detect_beat_mii; break;
         case API_PRIVATE: detect_beat_func = interface_detect_beat_priv; break;
         case API_WLAN: detect_beat_func = interface_detect_beat_wlan; break;
-		case API_IFF: detect_beat_func = interface_detect_beat_iff; break;
+        case API_IFF: detect_beat_func = interface_detect_beat_iff; break;
             
         default:
             detect_beat_func = detect_beat_auto; 
@@ -407,32 +408,32 @@ void work(void) {
             break;
     }
 
-	if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         daemon_log(LOG_ERR, "socket(): %s", strerror(errno));
-		goto finish;
+        goto finish;
     }
 
-	if (use_ifmonitor) {
-		int b;
-		if ((b = is_iface_available(fd, interface)) < 0) {
-			daemon_log(LOG_ERR, "Failed to check interface availabilty!");
-			goto finish;
-		}
-		
-		disabled = !b;
+    if (use_ifmonitor) {
+        int b;
+        if ((b = is_iface_available(fd, interface)) < 0) {
+            daemon_log(LOG_ERR, "Failed to check interface availabilty!");
+            goto finish;
+        }
+        
+        disabled = !b;
 
-		if (nlapi_open(RTMGRP_LINK) < 0)
-			goto finish;
+        if (nlapi_open(RTMGRP_LINK) < 0)
+            goto finish;
 
-		if (ifmonitor_init(ifmonitor_cb) < 0)
-			goto finish;
-	} else
-		disabled = 0;
+        if (ifmonitor_init(ifmonitor_cb) < 0)
+            goto finish;
+    } else
+        disabled = 0;
 
-	if (!disabled) {
-		if (welcome_iface(fd, interface) < 0)
-			goto finish;
-	}
+    if (!disabled) {
+        if (welcome_iface(fd, interface) < 0)
+            goto finish;
+    }
 
     if ((status = detect_beat(fd, interface)) == IFSTATUS_ERR)
         goto finish;
@@ -440,7 +441,7 @@ void work(void) {
     daemon_log(LOG_INFO, "Initialization complete, link beat %sdetected%s.", status == IFSTATUS_UP ? "" : "not ", use_ifmonitor ? (disabled ? ", interface disabled" : ", interface enabled") : "");
     beep(status == IFSTATUS_UP ? 0 : 1);
 
-    if (status == IFSTATUS_UP || initial_down)
+    if ((!no_startup_script && status == IFSTATUS_UP) || initial_down)
         if (action(status) < 0)
             goto finish;
 
@@ -453,17 +454,17 @@ void work(void) {
     FD_ZERO(&fds);
     FD_SET(sigfd = daemon_signal_fd(), &fds);
 
-	if (use_ifmonitor)
-		FD_SET(nlapi_fd, &fds);
+    if (use_ifmonitor)
+        FD_SET(nlapi_fd, &fds);
 
     for (;;) {
         interface_status_t s;
         fd_set qfds = fds;
-		int d;
+        int d;
         struct timeval tv;
 
-		tv.tv_sec = polltime;
-		tv.tv_usec = 0;
+        tv.tv_sec = polltime;
+        tv.tv_usec = 0;
         
         if (select(FD_SETSIZE, &qfds, NULL, NULL, &tv) < 0) {
             if (errno == EINTR)
@@ -473,55 +474,55 @@ void work(void) {
             goto finish;
         }
 
-		//daemon_log(LOG_INFO, "select()");
-		
-		d = disabled;
-		s = status;
-		
-		if (use_ifmonitor) {
+        //daemon_log(LOG_INFO, "select()");
+        
+        d = disabled;
+        s = status;
+        
+        if (use_ifmonitor) {
 
-			if (FD_ISSET(nlapi_fd, &qfds)) {
-				if (nlapi_work(0) < 0)
-					goto finish;
-			}
+            if (FD_ISSET(nlapi_fd, &qfds)) {
+                if (nlapi_work(0) < 0)
+                    goto finish;
+            }
 
-			if (d && !disabled) {
-				daemon_log(LOG_INFO, "Interface enabled");
-				welcome_iface(fd, interface);
-				status = IFSTATUS_DOWN;
-			}
-			
-			if (!d && disabled) {
-				daemon_log(LOG_INFO, "Interface disabled");
-				status = IFSTATUS_DOWN;
-			}
-		}
+            if (d && !disabled) {
+                daemon_log(LOG_INFO, "Interface enabled");
+                welcome_iface(fd, interface);
+                status = IFSTATUS_DOWN;
+            }
+            
+            if (!d && disabled) {
+                daemon_log(LOG_INFO, "Interface disabled");
+                status = IFSTATUS_DOWN;
+            }
+        }
             
 
         if (!paused && !disabled) {
-			//daemon_log(LOG_INFO, "detect");
+            //daemon_log(LOG_INFO, "detect");
             if ((status = detect_beat(fd, interface)) == IFSTATUS_ERR) {
-				if (!use_ifmonitor)
-					goto finish;
+                if (!use_ifmonitor)
+                    goto finish;
 
-				status = IFSTATUS_DOWN;
-			}
-		}
+                status = IFSTATUS_DOWN;
+            }
+        }
 
-		if (status != s) {
-			daemon_log(LOG_INFO, "Link beat %s.", status == IFSTATUS_DOWN ? "lost" : "detected");
-			beep(status == IFSTATUS_UP ? 0 : 1);
-			
-			if (t)
-				t = 0;
-			else {
-				t = time(NULL);
-				
-				if (status == IFSTATUS_UP)
-					t += delay_up;
-				
-				if (status == IFSTATUS_DOWN)
-					t += delay_down;
+        if (status != s) {
+            daemon_log(LOG_INFO, "Link beat %s.", status == IFSTATUS_DOWN ? "lost" : "detected");
+            beep(status == IFSTATUS_UP ? 0 : 1);
+            
+            if (t)
+                t = 0;
+            else {
+                t = time(NULL);
+                
+                if (status == IFSTATUS_UP)
+                    t += delay_up;
+                
+                if (status == IFSTATUS_DOWN)
+                    t += delay_down;
             }
         }
 
@@ -548,8 +549,8 @@ void work(void) {
                 case SIGHUP:
                     daemon_log(LOG_INFO, "SIGHUP: %s, link detected on %s: %s", paused ? "Suspended" : "Running", interface, status == IFSTATUS_DOWN ? "no" : "yes");
 
-					if (use_ifmonitor)
-						daemon_log(LOG_INFO, "SIGHUP: Interface %s", disabled ? "disabled" : "enabled");
+                    if (use_ifmonitor)
+                        daemon_log(LOG_INFO, "SIGHUP: Interface %s", disabled ? "disabled" : "enabled");
                     break;
                     
                 case SIGUSR1:
@@ -570,7 +571,7 @@ void work(void) {
             }
         }
 
-		if (t && t < time(NULL)) {
+        if (t && t < time(NULL)) {
             t = 0;
 
             if (action(status) < 0)
@@ -579,7 +580,7 @@ void work(void) {
     }
 
 cleanup:
-	if (!no_shutdown_script && (status == IFSTATUS_UP || (status == IFSTATUS_DOWN && t))) {
+    if (!no_shutdown_script && (status == IFSTATUS_UP || (status == IFSTATUS_DOWN && t))) {
         setenv(IFPLUGD_ENV_PREVIOUS, strstatus(status), 1);
         setenv(IFPLUGD_ENV_CURRENT, strstatus(-1), 1);
         action(IFSTATUS_DOWN);
@@ -591,9 +592,9 @@ finish:
     if (fd >= 0)
         close(fd);
 
-	if (use_ifmonitor)
-		nlapi_close();
-	
+    if (use_ifmonitor)
+        nlapi_close();
+    
     if (send_retval && daemonize && wait_on_fork)
         daemon_retval_send(255);
 
@@ -611,7 +612,7 @@ void usage(char *p) {
         case API_MII: m = "mii"; break;
         case API_PRIVATE: m = "priv"; break;
         case API_WLAN: m = "wlan"; break;
-		case API_IFF: m = "iff"; break;
+        case API_IFF: m = "iff"; break;
         default: m = "auto";
     }
     
@@ -619,8 +620,8 @@ void usage(char *p) {
         p = strchr(p, '/')+1;
 
     printf("%s -- Network Interface Plug Detection Daemon\n\n"
-		   "Usage: %s [options]\n\n"
-		   "Options:\n"
+           "Usage: %s [options]\n\n"
+           "Options:\n"
            "   -a --no-auto              Do not enable interface automatically (%s)\n"
            "   -n --no-daemon            Do not daemonize (for debugging) (%s)\n"
            "   -s --no-syslog            Do not use syslog, use stderr instead (for debugging) (%s)\n"
@@ -634,15 +635,16 @@ void usage(char *p) {
            "   -u --delay-up=SECS        Specify delay for configuring interface (%i)\n"
            "   -d --delay-down=SECS      Specify delay for deconfiguring interface (%i)\n"
            "   -m --api-mode=MODE        Force API mode (mii, priv, ethtool, wlan, auto) (%s)\n"
+           "   -p --no-startup           Don't run script on daemon startup (%s)\n"
            "   -q --no-shutdown          Don't run script on daemon quit (%s)\n"
-		   "   -l --initial-down         Run \"down\" script on startup if now cable is detected (%s)\n"
+           "   -l --initial-down         Run \"down\" script on startup if no cable is detected (%s)\n"
            "   -w --wait-on-fork         Wait until daemon fork finished (%s)\n"
-		   "   -W --wait-on-kill         When run with -k, wait until the daemon died (%s)\n"
-		   "   -x --extra-arg            Specify an extra argument for action script\n"
-		   "   -M --monitor              Use interface monitoring (%s)\n"
+           "   -W --wait-on-kill         When run with -k, wait until the daemon died (%s)\n"
+           "   -x --extra-arg            Specify an extra argument for action script\n"
+           "   -M --monitor              Use interface monitoring (%s)\n"
            "   -h --help                 Show this help\n"
            "   -k --kill                 Kill a running daemon\n"
-		   "   -c --check-running        Check if a daemon is currently running\n"
+           "   -c --check-running        Check if a daemon is currently running\n"
            "   -v --version              Show version\n"
            "   -S --suspend              Suspend running daemon\n"
            "   -R --resume               Resume running daemon\n"
@@ -661,11 +663,12 @@ void usage(char *p) {
            delay_up,
            delay_down,
            m,
+           no_startup_script ? "on" : "off",
            no_shutdown_script ? "on" : "off",
-		   initial_down ? "on" : "off",
+           initial_down ? "on" : "off",
            wait_on_fork ? "on" : "off",
-		   wait_on_kill ? "on" : "off",
-		   use_ifmonitor ? "on" : "off");
+           wait_on_kill ? "on" : "off",
+           use_ifmonitor ? "on" : "off");
 }
 
 void parse_args(int argc, char *argv[]) {
@@ -684,7 +687,8 @@ void parse_args(int argc, char *argv[]) {
         {"delay-down",           required_argument, 0, 'd'},
         {"api-mode",             required_argument, 0, 'm'},
         {"wait-on-fork",         no_argument, 0, 'w'},
-		{"wait-on-kill",         no_argument, 0, 'W'},
+        {"wait-on-kill",         no_argument, 0, 'W'},
+        {"no-startup",           no_argument, 0, 'p'},
         {"no-shutdown",          no_argument, 0, 'q'},
         {"help",                 no_argument, 0, 'h'},
         {"kill",                 no_argument, 0, 'k'},
@@ -694,8 +698,8 @@ void parse_args(int argc, char *argv[]) {
         {"suspend",              no_argument, 0, 'S'},
         {"resume",               no_argument, 0, 'R'},
         {"info",                 no_argument, 0, 'z'},
-		{"inital-down", 	     no_argument, 0, 'l'},
-		{"monitor",              no_argument, 0, 'M'},
+        {"initial-down",         no_argument, 0, 'l'},
+        {"monitor",              no_argument, 0, 'M'},
         {0, 0, 0, 0}
     };
     int option_index = 0;
@@ -704,7 +708,7 @@ void parse_args(int argc, char *argv[]) {
     for (;;) {
         int c;
         
-        if ((c = getopt_long(argc, argv, "asni:r:t:u:d:hkbfFvm:qwx:cISRzlMW", long_options, &option_index)) < 0)
+        if ((c = getopt_long(argc, argv, "asni:r:t:u:d:hkbfFvm:pqwx:cISRzlMW", long_options, &option_index)) < 0)
             break;
 
         switch (c) {
@@ -718,8 +722,8 @@ void parse_args(int argc, char *argv[]) {
                 daemonize = !daemonize;
                 break;
             case 'i' :
-				if (interface)
-					free(interface);
+                if (interface)
+                    free(interface);
                 interface = strdup(optarg);
                 break;
             case 'r':
@@ -766,25 +770,28 @@ void parse_args(int argc, char *argv[]) {
                     case 'p': api_mode = API_PRIVATE; break;
                     case 'w': api_mode = API_WLAN; break;
                     case 'a': api_mode = API_AUTO; break;
-					case 'i': api_mode = API_IFF; break;
+                    case 'i': api_mode = API_IFF; break;
                     default:
                         daemon_log(LOG_ERR, "Unknown API mode: %s", optarg);
                         exit(2);
                 }
                 break;
+            case 'p':
+                no_startup_script = !no_startup_script;
+                break;
             case 'q':
                 no_shutdown_script = !no_shutdown_script;
                 break;
-			case 'l':
-				initial_down = !initial_down;
-				break;
+            case 'l':
+                initial_down = !initial_down;
+                break;
             case 'w':
                 wait_on_fork = !wait_on_fork;
                 break;
             case 'W':
                 wait_on_kill = !wait_on_kill;
                 break;
-			case 'x':
+            case 'x':
                 extra_arg = strdup(optarg);
                 break;
             case 'S':
@@ -796,9 +803,9 @@ void parse_args(int argc, char *argv[]) {
             case 'z':
                 _info = 1;
                 break;
-			case 'M':
-				use_ifmonitor = !use_ifmonitor;
-				break;
+            case 'M':
+                use_ifmonitor = !use_ifmonitor;
+                break;
             default:
                 daemon_log(LOG_ERR, "Unknown parameter.");
                 exit(1);
@@ -806,8 +813,8 @@ void parse_args(int argc, char *argv[]) {
     }
 
 
-	if (!interface)
-		interface = strdup("eth0");
+    if (!interface)
+        interface = strdup("eth0");
     if (!use_syslog)
         daemon_log_use = DAEMON_LOG_STDERR;
     
@@ -818,14 +825,14 @@ void parse_args(int argc, char *argv[]) {
     }
 
     if (_kill || _resume || _suspend || _info) {
-		int rv;
-		
-		if (_kill && wait_on_kill)
-			rv = daemon_pid_file_kill_wait(SIGINT, 5);
-		else
-			rv = daemon_pid_file_kill(_kill ? SIGINT : (_resume ? SIGUSR2 : (_info ? SIGHUP : SIGUSR1)));
+        int rv;
+        
+        if (_kill && wait_on_kill)
+            rv = daemon_pid_file_kill_wait(SIGINT, 5);
+        else
+            rv = daemon_pid_file_kill(_kill ? SIGINT : (_resume ? SIGUSR2 : (_info ? SIGHUP : SIGUSR1)));
 
-		if (rv < 0) {
+        if (rv < 0) {
             daemon_log(LOG_ERR, "Failed to kill daemon. (%s)", strerror(errno));
             exit(6);
         }
@@ -849,11 +856,11 @@ void parse_args(int argc, char *argv[]) {
 
         if (pid == (pid_t) -1 || pid == 0) {
             printf("ifplugd not running.\n");
-			exit(255);
-		} else {
+            exit(255);
+        } else {
             printf("ifplugd process for device %s running as pid %u.\n", interface, pid);
-			exit(0);
-		}
+            exit(0);
+        }
     }
     
 }
@@ -880,7 +887,7 @@ int main(int argc, char* argv[]) {
         return 2;
     }
 
-	if (daemon_pid_file_is_running() >= 0) {
+    if (daemon_pid_file_is_running() >= 0) {
         daemon_log(LOG_ERR, "Sorry, there is already an instance of ifplugd for %s running.", interface);
         return 4;
     }
@@ -908,9 +915,9 @@ int main(int argc, char* argv[]) {
                     kill(pid, SIGTERM);
                 }
             
-			if (c > 3)
-				daemon_log(LOG_ERR, "Daemon failed with error condition #%i. See syslog for details", c);
-			
+            if (c > 3)
+                daemon_log(LOG_ERR, "Daemon failed with error condition #%i. See syslog for details", c);
+            
             return c;
         }
     }
