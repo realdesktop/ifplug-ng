@@ -273,6 +273,8 @@ compilation and <tt>make install</tt> (as root) for installation of
 <tt>${sysconfdir}/init.d/ifplugd</tt>, however no <tt>/etc/rc?.d/</tt> links are created
 for it.</p>
 
+<p>Extensive installation instructions for <tt>ifplugd</tt> are available at <a href="http://www.acmc.uq.edu.au/~gbe/linux/installation_of_ifplugd.html">Geoff Ericksson's web site</a>.</p>
+
 <h2><a name="acks">Acknowledgements</a></h2>
 
 <p>For the developers of <tt>mii-diag</tt>, <tt>ethtool</tt> and <tt>laptop-net</tt>, since I looked
