@@ -1,3 +1,10 @@
+0.19 :: 20 Oct 2003 :: SVN 59
+	--wait-for-kill fix
+	minor documentation updates, other fixes
+	
+0.18 :: 17 Oct 2003 :: SVN ??
+	Bugfixes
+
 0.17b :: 13 Sep 2003 :: SVN 48
 	Fixed some typos
 
