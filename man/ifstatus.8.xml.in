@@ -1,0 +1,116 @@
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE spec SYSTEM "man.dtd">
+
+<!-- $Id: ifstatus.8.xml 1.3 Fri, 25 Oct 2002 21:12:38 +0200 lennart $ -->
+
+<!-- 
+  This file is part of ifplugd.
+
+  ifplugd is free software; you can redistribute it and/or modify it under
+  the terms of the GNU General Public License as published by the Free
+  Software Foundation; either version 2 of the License, or (at your
+  option) any later version.
+
+  ifplugd is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+  for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with ifplugd; if not, write to the Free Software Foundation,
+  Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA. 
+-->
+
+  <manpage name="ifstatus" section="8" desc="A link beat detection tool">
+
+	<synopsis>
+	  <cmd>ifstatus [<arg>options</arg>] [<arg>INTERFACE</arg>]</cmd>
+	</synopsis>
+	
+	<description>
+	  <p>ifstatus is an utility which may be used to detect the link
+	  status of a local Linux ethernet device, much in the same way
+	  mii-diag, mii-tool and ethtool work. In fact it supports all
+	  three different APIs these three tools use. Thus, it provides
+	  maximal compatibility. The newest API (ethtool) is used first,
+	  than the next older (mii-diag) and at last the oldest
+	  (mii-tool). It may be used in shell script since it returns the
+	  current status as return value. It is especially useful to
+	  detect the available APIs on the used network driver. (Option 
+	  <opt>-v</opt>)</p>
+	</description>
+	
+	<options>
+
+	  <p>You may speicify an ethernet device on the command
+	  line. Otherwise ifstatus will check for eth0..eth9
+	  automatically.</p>
+	  
+	  <option>
+		<p><opt>-a | --auto</opt></p>
+		<optdesc><p>
+			Enable interface automatically before querying (default: off)
+		  </p></optdesc>
+	  </option>
+	  
+
+	  <option>
+		<p><opt>-h | --help</opt></p>
+		<optdesc><p>
+			Show help
+		  </p></optdesc>
+	  </option>
+
+	  <option>
+		<p><opt>-q | --quiet</opt></p> <optdesc><p>Decrease verbosity
+		by one. If the verbosity is &lt; 0, no text will be shown,
+		only the return value is relevant; if the verbosity is = 0, a
+		terse status will be shown; If the verbosity is &gt; 0,
+		detailed information about the used API is returned. (By
+		default the verbosity is 0)</p></optdesc>
+	  </option>
+
+	  <option>
+		<p><opt>-v | --verbose</opt></p>
+		<optdesc><p>
+			Increase verbosity by one. See option <opt>-q</opt>.
+		  </p></optdesc>
+	  </option>
+	  
+	  <option>
+		<p><opt>-V | --version</opt></p>
+		<optdesc><p>
+			Show version
+		  </p></optdesc>
+	  </option>
+	  
+	</options>
+	
+	<section name="Return values">
+	  <p><arg>0</arg> Success</p>
+	  <p><arg>1</arg> Failure</p>
+	  <p><arg>2</arg> Link beat detected (only available when an interface is specified)</p>
+	  <p><arg>3</arg> Unplugged (same here)</p>
+	</section>
+	
+	<section name="Author">
+	  <p>ifplugd was written by Lennart Poettering
+		&lt;@PACKAGE_BUGREPORT@&gt;.  ifplugd is available
+		at <url
+		href="http://www.stud.uni-hamburg.de/users/lennart/projects/ifplugd/"/>
+	  </p>
+	</section>
+	
+	<section name="See also">
+	  <p>
+		<manref name="mii-diag" section="8"/>, <manref name="mii-tool"
+		  section="8"/>, <manref name="ethtool" section="8"/>
+	  </p>
+	</section>
+	
+	<section name="Comments">
+	  <p>This man page was written using <manref name="xml2man" section="1"
+		  href="http://masqmail.cx/xml2man/"/> by Oliver Kurth.</p>
+	</section>
+	
+  </manpage>

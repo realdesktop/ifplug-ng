@@ -1,0 +1,32 @@
+# $Id: Makefile.am 22 2003-06-15 16:36:33Z lennart $
+
+# This file is part of ifplugd.
+#
+# ifplugd is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# ifplugd is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ifplugd; if not, write to the Free Software Foundation,
+# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+
+noinst_DATA = ifplugd.init ifplugd.action ifplugd.conf
+
+EXTRA_DIST = ifplugd.init.in ifplugd.action ifplugd.conf
+
+CLEANFILES = ifplugd.init
+
+ifplugd.init: ifplugd.init.in Makefile
+	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' $< > $@
+	chmod 755 $@
+
+install-data-local: ifplugd.init
+	$(INSTALL) -D -m755 ifplugd.init ${DESTDIR}/${sysconfdir}/init.d/ifplugd
+	$(INSTALL) -D -m755 ifplugd.action ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.action
+	$(INSTALL) -D -m644 ifplugd.conf ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.conf
