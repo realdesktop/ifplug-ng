@@ -42,9 +42,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
-<div class="news-date">Thu July 10 2003: </div> <p class="news-text"><a
+<div class="news-date">Thu Aug 13 2003: </div> <p class="news-text"><a
 href="http://www.stud.uni-hamburg.de/~lennart/projects/ifplugd/ifplugd-0.16.tar.gz">Version
-0.16</a> released, changes include: RPM spec file added, build fixes</p>
+0.16</a> released, changes include: RPM spec file added, build fixes, WLAN improvements (including compatibility with the upcoming <tt>waproamd</tt>, a WLAN roaming daemon), monitor mode for use in conjunction with PCMCIA devices, better support for multiple interface setups, <tt>SUPPORTED_DRIVERS</tt> returns</p>
 
 <div class="news-date">Thu July 10 2003: </div> <p class="news-text"><a
 href="http://www.stud.uni-hamburg.de/~lennart/projects/ifplugd/ifplugd-0.15.tar.gz">Version
