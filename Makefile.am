@@ -16,7 +16,7 @@
 # along with ifplugd; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-EXTRA_DIST=bootstrap.sh README LICENSE ifplugd.spec
+EXTRA_DIST=bootstrap.sh README LICENSE ifplugd.spec ifplugd.spec.in
 SUBDIRS=src man conf doc patches
 
 MAINTAINERCLEANFILES = README ifplugd.spec
@@ -25,7 +25,7 @@ noinst_DATA = README ifplugd.spec
 README:
 	rm -f README
 	$(MAKE) -C doc README
-	ln -s doc/README README
+	cd $(srcdir) && ln -s doc/README README
 
 homepage: all dist
 	test -d $$HOME/homepage/lennart
@@ -33,7 +33,6 @@ homepage: all dist
 	cp *.tar.gz $$HOME/homepage/lennart/projects/ifplugd
 	cp man/ifplugd.8.xml man/ifplugstatus.8.xml man/ifplugd.conf.5.xml man/xmltoman.css man/xmltoman.xsl man/xmltoman.dtd doc/README.html doc/style.css doc/NEWS $$HOME/homepage/lennart/projects/ifplugd
 	cp $$HOME/homepage/lennart/projects/ifplugd/README.html $$HOME/homepage/lennart/projects/ifplugd/index.html
-
 
 distcleancheck:
 	@:

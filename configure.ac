@@ -65,7 +65,7 @@ AC_TYPE_SIGNAL
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([alarm dup2 memset select setenv socket strchr strdup strerror strrchr strspn])
 
-PKG_CHECK_MODULES(LIBDAEMON, [ libdaemon >= 0.4 ])
+PKG_CHECK_MODULES(LIBDAEMON, [ libdaemon >= 0.5 ])
 AC_SUBST(LIBDAEMON_CFLAGS)
 AC_SUBST(LIBDAEMON_LIBS)
 

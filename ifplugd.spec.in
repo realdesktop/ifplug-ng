@@ -6,7 +6,7 @@ Version:      @PACKAGE_VERSION@
 Release:      1
 Copyright:    GPL
 Group:        Networking/Daemons
-URL:          http://www.stud.uni-hamburg.de/users/lennart/projects/ifplugd/
+URL:          http://0pointer.de/lennart/projects/ifplugd/
 Source:       %{name}-%{version}.tar.gz
 Packager:     Diego Santa Cruz <Diego.SantaCruz@epfl.ch>
 BuildRoot:    %{_tmppath}/%{name}-%{version}-root
