@@ -10,7 +10,7 @@
 <body>
 <h1><a name="top">ifplugd @PACKAGE_VERSION@</a></h1>
 
-<p><i>Copyright 2002,2003 Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;</i></p>
+<p><i>Copyright 2002-2004 Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;</i></p>
 
 <ul class="toc">
     <li><a href="#license">License</a></li>
@@ -41,6 +41,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
+
+<div class="news-date">Sun Jan 25 2003: </div> <p class="news-text"><a
+href="@PACKAGE_URL@ifplugd-0.21.tar.gz">Version
+0.21</a> released, changes include: better compatibility with wireless devices, compatibility with newer kernels</p>
 
 <div class="news-date">Sun Nov 9 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.20.tar.gz">Version
@@ -299,8 +303,10 @@ manpage</p>
 
 <p>Packages for Mandrake Linux may be found in the Cooker distribution; Gentoo packages are available as well; <a href="http://packman.links2linux.de/">SuSE packages</a> are available courtesy of Herbert Graeber.</p>
 
+<p>If you want to be notified whenever I release a new version of this software use the subscription feature of <a href="http://freshmeat.net/projects/ifplugd/">Freshmeat</a>.</p>
+
 <hr/>
-<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, October 2003</address>
+<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, January 2004</address>
 <div class="grey"><i>$Id$</i></div>
 
 </body>
