@@ -20,7 +20,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ(2.59)
-AC_INIT([ifplugd],[0.25],[mzvscyhtq (at) 0pointer (dot) de])
+AC_INIT([ifplugd],[0.26],[mzvscyhtq (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/ifplugd.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])
@@ -40,9 +40,13 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
-# If using GCC specifiy some additional parameters
+# If using GCC specify some additional parameters
 if test "x$GCC" = "xyes" ; then
-   CFLAGS="$CFLAGS -pipe -Wall"
+   CFLAGS="$CFLAGS -pipe -W -Wall -pedantic"
+
+   AC_LANG_CONFTEST([int main() {}])
+   $CC -c conftest.c -std=c99 -Wno-unused-parameter $CFLAGS > /dev/null 2> /dev/null && CFLAGS="$CFLAGS -std=c99 -Wno-unused-parameter"
+   rm -f conftest.o
 fi
 
 # Checks for header files.
