@@ -42,7 +42,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
-<div class="news-date">Sun Jan 25 2003: </div> <p class="news-text"><a
+<div class="news-date">Mon Jan 26 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.21.tar.gz">Version
 0.21</a> released, changes include: better compatibility with wireless devices, compatibility with newer kernels</p>
 
