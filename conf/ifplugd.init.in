@@ -55,11 +55,14 @@ fi
 
 [ -f $CFG ] && . $CFG
 
-[ -n "$2" ] && INTERFACES="$2"
+VERB="$1"
+shift
 
-[ "$INTERFACES" = "auto" ] && INTERFACES=`cat /proc/net/dev | awk '{ print $1 }' | egrep '^(eth|wlan)' | cut -d: -f1`
+[ "x$@" != "x" ] && INTERFACES="$@"
 
-case "$1" in
+[ "x$INTERFACES" = "xauto" ] && INTERFACES="`cat /proc/net/dev | awk '{ print $1 }' | egrep '^(eth|wlan)' | cut -d: -f1`"
+
+case "$VERB" in
     start)
         echo -n "Starting Network Interface Plugging Daemon:"
         for IF in $INTERFACES ; do
@@ -100,9 +103,9 @@ case "$1" in
         echo "."    
         ;;
     force-reload|restart)
-        $0 stop
+        $0 stop $INTERFACES
         sleep 3
-        $0 start
+        $0 start $INTERFACES
         ;;
     *)
         echo "Usage: $0 {start|stop|restart|force-reload|status|suspend|resume}"
