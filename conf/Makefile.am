@@ -1,4 +1,4 @@
-# $Id: Makefile.am 22 2003-06-15 16:36:33Z lennart $
+# $Id$
 
 # This file is part of ifplugd.
 #
@@ -27,9 +27,9 @@ ifplugd.init: ifplugd.init.in Makefile
 	chmod 755 $@
 
 install-data-local: ifplugd.init
-	$(INSTALL) -b -D -m755 ifplugd.init ${DESTDIR}/${sysconfdir}/init.d/ifplugd
-	$(INSTALL) -b -D -m755 $(srcdir)/ifplugd.action ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.action
-	$(INSTALL) -b -D -m644 $(srcdir)/ifplugd.conf ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.conf
+	$(INSTALL) -b -D -m755 ifplugd.init ${DESTDIR}${sysconfdir}/init.d/ifplugd
+	$(INSTALL) -b -D -m755 $(srcdir)/ifplugd.action ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action
+	$(INSTALL) -b -D -m644 $(srcdir)/ifplugd.conf ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.conf
 
 uninstall-local:
-	rm -f ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}/${sysconfdir}/ifplugd/ifplugd.conf ${DESTDIR}/${sysconfdir}/init.d/ifplugd
+	rm -f ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.conf ${DESTDIR}${sysconfdir}/init.d/ifplugd

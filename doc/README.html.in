@@ -44,7 +44,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <div class="news-date">Sun Nov 9 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.20.tar.gz">Version
-0.20</a> released, changes include: fix wrong message, build fix</a></p>
+0.20</a> released, changes include: fix wrong message, build fix</p>
 
 <div class="news-date">Mon Oct 20 2003: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.19.tar.gz">Version
@@ -297,7 +297,7 @@ manpage</p>
 
 <p>You may find a mostly up to date Debian package of <tt>ifplugd</tt> on the <a href="http://packages.debian.org/ifplugd">Debian package repository</a>.</p>
 
-<p>Packages for Mandrake Linux may be found in the Cooker distribution; Gentoo packages are available as well</p>
+<p>Packages for Mandrake Linux may be found in the Cooker distribution; Gentoo packages are available as well; <a href="http://packman.links2linux.de/">SuSE packages</a> are available courtesy of Herbert Graeber.</p>
 
 <hr/>
 <address>Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, October 2003</address>
