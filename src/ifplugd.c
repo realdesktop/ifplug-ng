@@ -163,7 +163,7 @@ int action(interface_status_t status) {
 
 		umask(0022); /* Set up a sane umask */
         
-        execl(run, run, interface, arg, extra_arg, 0);
+        execl(run, run, interface, arg, extra_arg, (char *) NULL);
 
         _exit(EXIT_FAILURE);
     }
