@@ -39,13 +39,14 @@
 	  
 	  <p>The APIs are tried in the following order:</p>
 	 
-	  <p>First the cleanest API: <arg>IFF_RUNNING</arg> (aka ifconfig API)</p>
-	  <p>Second the newest API: <arg>SIOCETHTOOL</arg> (aka ethtool API)</p>
-	  <p>Third the next older API: <arg>SIOCGMIIREG</arg> (aka mii-diag API)</p>
+	  <p>First the newest API: <arg>SIOCETHTOOL</arg> (aka ethtool API)</p>
+	  <p>Second the next older API: <arg>SIOCGMIIREG</arg> (aka mii-diag API)</p>
 	  <p>Than the WLAN API: <arg>wireless extension</arg> (aka iwconfig API)</p>
-	  <p>Finally the oldest API: <arg>SIOCPRIV</arg> (aka mii-tool API)</p>
+	  <p>Followed by the cleanest API: <arg>IFF_RUNNING</arg> (aka ifconfig API)</p>
 	  
-	  <p>It may be used in shell script since it returns the
+      <p>The oldest API (<arg>SIOCPRIV</arg> aka mii-tool API) is not tested since it is obsolete.</p>
+	  
+	  <p>ifplugstatus may be used in shell script since it returns the
 	  current status as return value. It is especially useful to
 	  detect the available APIs on the used network driver. (Option 
 	  <opt>-v</opt>)</p>

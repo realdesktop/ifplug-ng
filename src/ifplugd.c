@@ -254,12 +254,6 @@ interface_status_t detect_beat_auto(int fd, char *iface) {
     if (cached_detect_beat_func && (status = cached_detect_beat_func(fd, iface)) != IFSTATUS_ERR)
         return status;
     
-    if ((status = interface_detect_beat_iff(fd, iface)) != IFSTATUS_ERR) {
-        cached_detect_beat_func = interface_detect_beat_iff;
-        daemon_log(LOG_INFO, "Using detection mode: IFF_RUNNING");
-        return status;
-    }
-
     if ((status = interface_detect_beat_ethtool(fd, iface)) != IFSTATUS_ERR) {
         cached_detect_beat_func = interface_detect_beat_ethtool;
         daemon_log(LOG_INFO, "Using detection mode: SIOCETHTOOL");
@@ -278,9 +272,9 @@ interface_status_t detect_beat_auto(int fd, char *iface) {
         return status;
     }
 
-    if ((status = interface_detect_beat_priv(fd, iface)) != IFSTATUS_ERR) {
-        cached_detect_beat_func = interface_detect_beat_priv;
-        daemon_log(LOG_INFO, "Using detection mode: SIOCDEVPRIVATE");
+    if ((status = interface_detect_beat_iff(fd, iface)) != IFSTATUS_ERR) {
+        cached_detect_beat_func = interface_detect_beat_iff;
+        daemon_log(LOG_INFO, "Using detection mode: IFF_RUNNING");
         return status;
     }
 
