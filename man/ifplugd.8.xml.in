@@ -167,9 +167,10 @@
 
 	  <option>
 	  	<p><opt>-M | --monitor</opt></p>
-		<optdesc></p>
+		<optdesc><p>
 			Don't fail when the network interface is not available, instead use NETLINK to monitor device avaibility. The is useful for PCMCIA devices and similar. 
 		</p></optdesc>
+	  </option>
 	  
 	  <option>
 		<p><opt>-h | --help</opt></p>
