@@ -287,7 +287,7 @@ on their source codes for learning how to use the link beat ioctls.</p>
 <p>Oliver Kurth for packaging <tt>ifplugd</tt> for Debian and <tt>ifplugd</tt>'s
 manpage</p>
 
-<p>Thomas Hood, Asgeir Nilsen, Sean Reifschneider, R. Steve McKown, David Mitchell for patches</p>
+<p>Thomas Hood, Asgeir Nilsen, Sean Reifschneider, R. Steve McKown, David Mitchell, Norbert Preining for patches</p>
 
 <p>Frederic Lepied for integrating <tt>ifplugd</tt> into Mandrake Linux</p>
 
