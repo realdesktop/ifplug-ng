@@ -338,7 +338,7 @@ manpage</p>
 
 <p>You may find an up to date Debian package of <tt>ifplugd</tt> on the <a href="http://packages.debian.org/ifplugd">Debian package repository</a>.</p>
 
-<p>Packages for Mandrake Linux may be found in the Cooker distribution; Gentoo packages are available as well; <a href="http://packman.links2linux.de/">SuSE packages</a> are available courtesy of Herbert Graeber.</p>
+<p>Packages for Mandrake Linux may be found in the Cooker distribution; Gentoo packages are available as well; <a href="http://packman.links2linux.de/">SuSE packages</a> are available courtesy of Herbert Graeber; <a href="http://www.linuxdicas.com.ar/caleb/rpm">Conectiva packages</a> are available courtesy of Gonzalo Nemmi.</p>
 
 <p>If you want to be notified whenever I release a new version of this software use the subscription feature of <a href="http://freshmeat.net/projects/ifplugd/">Freshmeat</a>.</p>
 
