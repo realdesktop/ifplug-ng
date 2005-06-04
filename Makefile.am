@@ -32,7 +32,7 @@ homepage: all dist
 	mkdir -p $$HOME/homepage/private/projects/ifplugd
 	cp  ifplugd-@PACKAGE_VERSION@.tar.gz $$HOME/homepage/private/projects/ifplugd
 	cp man/ifplugd.8.xml man/ifplugstatus.8.xml man/ifplugd.conf.5.xml man/xmltoman.css man/xmltoman.xsl man/xmltoman.dtd doc/README.html doc/style.css doc/NEWS $$HOME/homepage/private/projects/ifplugd
-	cp $$HOME/homepage/private/projects/ifplugd/README.html $$HOME/homepage/private/projects/ifplugd/index.html
+	ln -sf README.html $$HOME/homepage/private/projects/ifplugd/index.html
 
 distcleancheck:
 	@:
