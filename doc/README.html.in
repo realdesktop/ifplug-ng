@@ -42,6 +42,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
+<div class="news-date">Sat Jun 4 2005: </div> <p class="news-text"><a 
+href="@PACKAGE_URL@ifplugd-0.27.tar.gz">Version 0.28</a> released,
+changes include: build fixes from Stefan Seyfried.</p>
+
 <div class="news-date">Wed Mar 30 2005: </div> <p class="news-text"><a
 href="@PACKAGE_URL@ifplugd-0.27.tar.gz">Version 0.27</a> released,
 changes include: new option <tt>--no-startup</tt>.</p>
@@ -322,7 +326,7 @@ on their source codes for learning how to use the link beat ioctls.</p>
 <p>Oliver Kurth for packaging <tt>ifplugd</tt> for Debian and <tt>ifplugd</tt>'s
 manpage</p>
 
-<p>Thomas Hood, Asgeir Nilsen, Sean Reifschneider, R. Steve McKown, David Mitchell, Norbert Preining, Herbert Graeber for patches</p>
+<p>Stefan Seyfried, Thomas Hood, Asgeir Nilsen, Sean Reifschneider, R. Steve McKown, David Mitchell, Norbert Preining, Herbert Graeber for patches</p>
 
 <p>Frederic Lepied for integrating <tt>ifplugd</tt> into Mandrake Linux</p>
 
@@ -338,14 +342,14 @@ manpage</p>
 
 <p>You may find an up to date Debian package of <tt>ifplugd</tt> on the <a href="http://packages.debian.org/ifplugd">Debian package repository</a>.</p>
 
-<p>Packages for Mandrake Linux may be found in the Cooker distribution; Gentoo packages are available as well; <a href="http://packman.links2linux.de/">SuSE packages</a> are available courtesy of Herbert Graeber; <a href="http://www.linuxdicas.com.ar/caleb/rpm">Conectiva packages</a> are available courtesy of Gonzalo Nemmi.</p>
+<p><tt>ifplugd</tt> is nowadays included in many popular distributions (Mandrake, Gentoo, Suse, Debian, Ubuntu); <a href="http://www.linuxdicas.com.ar/caleb/rpm">Conectiva packages</a> are available courtesy of Gonzalo Nemmi. Fedora Core packages are available from <a href="http://dag.wieers.com/packages/ifplugd/">Dag Wieers</a>.</p>
 
 <p>If you want to be notified whenever I release a new version of this software use the subscription feature of <a href="http://freshmeat.net/projects/ifplugd/">Freshmeat</a>.</p>
 
 <p><b>New!</b> There is a joint <tt>ifplugd</tt> and <tt>waproamd</tt> <a href="https://seth.intheinter.net/mailman/listinfo/ifplugd-discuss">mailing list</a> available.</p>
 
 <hr/>
-<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, March 2005</address>
+<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, June 2005</address>
 <div class="grey"><i>$Id$</i></div>
 
 </body>

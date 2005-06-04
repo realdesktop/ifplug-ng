@@ -173,7 +173,8 @@ int action(interface_status_t status) {
 
     FD_ZERO(&rfds);
     FD_SET(_pipe[0], &rfds);
-    FD_SET(sigfd = daemon_signal_fd(), &rfds);    
+    sigfd = daemon_signal_fd();
+    FD_SET(sigfd, &rfds);    
 
     n = 0;
 
@@ -452,7 +453,8 @@ void work(void) {
     }
 
     FD_ZERO(&fds);
-    FD_SET(sigfd = daemon_signal_fd(), &fds);
+    sigfd = daemon_signal_fd();
+    FD_SET(sigfd, &fds);
 
     if (use_ifmonitor)
         FD_SET(nlapi_fd, &fds);
