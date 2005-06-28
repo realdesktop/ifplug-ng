@@ -17,6 +17,7 @@ tulip    | k2.4.18              | works; does it work with -a???
 3c59x    | k2.4.19 and .20	| Works, even with -a
 hostap   | d0.0.3               | Works, even with -a
 b44	 | k2.6.3-rc2           | Works
+sk98lin  | 2.6.11 d0.28         | Works
 
 Please help me to extend this list and send me
 (mzvscyhtq (at) 0pointer (dot) de) more information about your
