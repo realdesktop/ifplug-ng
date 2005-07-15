@@ -52,7 +52,7 @@
 	  <option>
 		<p><opt>-a | --no-auto</opt></p>
 		<optdesc><p>
-			Do not enable interface automatically (default: off)
+			Do not bring up the interface automatically, i.e. do not set IFF_UP for the device.  Please note that this option is incompatible with some network drivers. When the device is brought up any confgured IP address is removed. (default: off)
 		  </p></optdesc>
 	  </option>
 	  
