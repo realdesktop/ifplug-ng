@@ -84,9 +84,13 @@ if test "x$with_initdir" = x ; then
     else
     	if test -d /etc/rc.d/init.d ; then
         	SYSINITDIR=/etc/rc.d/init.d
-    	else
-        	AC_MSG_ERROR([missing --with-initdir=DIR])
-	    fi
+	else
+		if test -e /etc/rc.d/rc.inet1 ; then
+			SYSINITDIR=/etc/rc.d
+    		else
+        		AC_MSG_ERROR([missing --with-initdir=DIR])
+	    	fi
+	fi
     fi
 else
    SYSINITDIR="$with_initdir"
