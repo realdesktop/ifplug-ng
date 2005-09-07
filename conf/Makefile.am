@@ -26,7 +26,7 @@ CLEANFILES = ifplugd.init
 
 ifplugd.init: ifplugd.init.in Makefile
 	sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@sbindir\@,$(sbindir),g' $< > $@
-	chmod 755 $@
+	chmod +x $@
 
 install-data-local: ifplugd.init
 	$(INSTALL) -b -D -m755 ifplugd.init ${DESTDIR}${sysinitdir}/ifplugd
