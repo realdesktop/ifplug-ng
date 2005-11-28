@@ -338,7 +338,7 @@ manpage</p>
 
 <p>Get <tt>ifplugd</tt>'s development sources from the <a href="http://subversion.tigris.org/">Subversion</a> <a href="svn://seth.intheinter.net/ifplugd">repository</a> (<a href="http://0pointer.de/cgi-bin/viewcvs.cgi/?root=ifplugd">viewcvs</a>): </p>
 
-<pre>svn checkout svn://seth.intheinter.net/ifplugd/trunk ifplugd</pre>
+<pre>svn checkout svn://0pointer.de/ifplugd/trunk ifplugd</pre>
 
 <p>You may find an up to date Debian package of <tt>ifplugd</tt> on the <a href="http://packages.debian.org/ifplugd">Debian package repository</a>.</p>
 
