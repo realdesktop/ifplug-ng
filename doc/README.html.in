@@ -43,7 +43,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 <h2><a name="news">News</a></h2>
 
 <div class="news-date">Sat Jun 4 2005: </div> <p class="news-text"><a 
-href="@PACKAGE_URL@ifplugd-0.27.tar.gz">Version 0.28</a> released,
+href="@PACKAGE_URL@ifplugd-0.28.tar.gz">Version 0.28</a> released,
 changes include: build fixes from Stefan Seyfried.</p>
 
 <div class="news-date">Wed Mar 30 2005: </div> <p class="news-text"><a
