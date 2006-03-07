@@ -22,9 +22,9 @@
 #include <config.h>
 #endif
 
+#include <sys/types.h>
 #include <linux/sockios.h>
 #include <linux/if_ether.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <linux/if.h>
