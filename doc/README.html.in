@@ -336,7 +336,7 @@ manpage</p>
 
 <p>The current release is <a href="@PACKAGE_URL@ifplugd-@PACKAGE_VERSION@.tar.gz">@PACKAGE_VERSION@</a></p>
 
-<p>Get <tt>ifplugd</tt>'s development sources from the <a href="http://subversion.tigris.org/">Subversion</a> <a href="svn://seth.intheinter.net/ifplugd">repository</a> (<a href="http://0pointer.de/cgi-bin/viewcvs.cgi/?root=ifplugd">viewcvs</a>): </p>
+<p>Get <tt>ifplugd</tt>'s development sources from the <a href="http://subversion.tigris.org/">Subversion</a> <a href="svn://0pointer.de/ifplugd">repository</a> (<a href="http://0pointer.de/cgi-bin/viewcvs.cgi/?root=ifplugd">viewcvs</a>): </p>
 
 <pre>svn checkout svn://0pointer.de/ifplugd/trunk ifplugd</pre>
 
