@@ -162,7 +162,7 @@
 		<optdesc><p> When daemonizing, wait until the background
 		process finished with the initial link beat detection. When
 		this is enabled, the parent process will return the link
-		status on exit. 1 means link beat detected, 2 stands for link
+		status on exit. 2 means link beat detected, 3 stands for link
 		beat not detected, everything else is an error.
 		</p></optdesc>
 	  </option>
