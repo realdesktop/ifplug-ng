@@ -409,7 +409,7 @@ void work(void) {
             break;
     }
 
-    if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    if ((fd = socket(AF_LOCAL, SOCK_DGRAM, 0)) < 0) {
         daemon_log(LOG_ERR, "socket(): %s", strerror(errno));
         goto finish;
     }
