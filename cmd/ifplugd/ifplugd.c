@@ -54,8 +54,10 @@
 #include "interface.h"
 #include "nlapi.h"
 #include "ifmonitor.h"
+
 #include "svn-revision.h"
 
+#define SYSCONFDIR "/etc/"
 #define VARRUN "/var/run"
 #define IFPLUGD_ENV_PREVIOUS "IFPLUGD_PREVIOUS"
 #define IFPLUGD_ENV_CURRENT "IFPLUGD_CURRENT"
