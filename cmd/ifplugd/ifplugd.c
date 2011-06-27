@@ -68,6 +68,7 @@ struct interface_state {
     int status_time;
 
     interface_status_t (*detect)(int, char*);
+    struct rbus_t *rbus;
 
     struct interface_state* next;
 };
@@ -169,6 +170,7 @@ static inline void add_interface(const char *ifname) {
     // register rbus object
     priv = malloc(sizeof(*priv));
     priv->native = iface;
+    iface->rbus = priv;
     strcpy(priv->name, iface->name);
     priv->root = rbus;
     priv->props = &iface_props[0];
@@ -185,7 +187,9 @@ static inline void add_interface(const char *ifname) {
     strcpy(child->name, "iface");
     child->rbus = priv;
 
-    daemon_log(LOG_INFO, "added interface %s\n", iface->name);
+    daemon_log(LOG_INFO, "added interface %s", iface->name);
+
+    rbus_event(&rbus->rbus.events, "plug %s\n", iface->name);
 }
 
 void rbus_drop_child(struct rbus_t *rbus, void *ref) {
@@ -237,6 +241,7 @@ void drop_interface(struct interface_state *diface) {
         else
             interface = iface->next;
 
+        rbus_event(&rbus->rbus.events, "unplug %s\n", iface->name);
         rbus_drop_child(&rbus->rbus, iface);
         free(iface);
 
@@ -318,6 +323,9 @@ void status_change(struct interface_state *iface) {
 
      daemon_log(LOG_INFO, "Link beat %s.", iface->status == IFSTATUS_DOWN ? "lost" : "detected");
      iface->status_time = -1;
+
+     rbus_event(&rbus->rbus.events, "link %s %s\n", iface->name, iface->status == IFSTATUS_DOWN ? "lost" : "detected");
+     rbus_event(&iface->rbus->events, "link %s\n", iface->status == IFSTATUS_DOWN ? "lost" : "detected");
 
 }
 
