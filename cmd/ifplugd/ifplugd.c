@@ -345,11 +345,15 @@ void work(void) {
                 daemon_log(LOG_INFO, "Interface enabled");
                 welcome_iface(fd, interface);
                 status = IFSTATUS_DOWN;
+                rbus_event(&rbus->rbus.events, "iface enabled\n");
+
             }
             
             if (!d && disabled) {
                 daemon_log(LOG_INFO, "Interface disabled");
                 status = IFSTATUS_DOWN;
+                rbus_event(&rbus->rbus.events, "iface disabled\n");
+
             }
         }
             
