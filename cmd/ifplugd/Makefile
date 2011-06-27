@@ -2,7 +2,7 @@ ROOT=../..
 include $(ROOT)/mk/hdr.mk
 include $(ROOT)/mk/ifplug.mk
 
-LDLIBS = -ldaemon
+LDLIBS = -ldaemon -lrbus -L/usr/local/lib -Wl,-rpath=/usr/local/lib
 TARG =	ifplugd
 OBJ =  \
        ifplugd \

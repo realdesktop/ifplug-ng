@@ -45,6 +45,8 @@
 #include <sys/time.h>
 #include <time.h>
 
+#include <rbus.h>
+
 #include <libdaemon/dlog.h>
 #include <libdaemon/dpid.h>
 #include <libdaemon/dsignal.h>
@@ -294,11 +296,21 @@ void work(void) {
     if (use_ifmonitor)
         FD_SET(nlapi_fd, &fds);
 
+    struct rbus_root *rbus;
+    rbus = rbus_init("unix!/tmp/ifplugd.9p");
+
     for (;;) {
         interface_status_t s;
         fd_set qfds = fds;
         int d;
         struct timeval tv;
+
+        IxpConn *c;
+        for(c = rbus->srv->conn; c; c = c->next) {
+            if(c->read) {
+                FD_SET(c->fd, &qfds);
+            }
+        }
 
         tv.tv_sec = polltime;
         tv.tv_usec = 0;
@@ -315,6 +327,12 @@ void work(void) {
         
         d = disabled;
         s = status;
+
+        for(c = rbus->srv->conn; c; c = c->next) {
+            if(c->read && FD_ISSET(c->fd, &qfds)) {
+                c->read(c);
+            }
+        }
         
         if (use_ifmonitor) {
 
@@ -348,7 +366,9 @@ void work(void) {
 
         if (status != s) {
             daemon_log(LOG_INFO, "Link beat %s.", status == IFSTATUS_DOWN ? "lost" : "detected");
-            
+
+            rbus_event(&rbus->rbus.events, "link %s\n", status == IFSTATUS_DOWN ? "lost" : "detected");
+
             if (t)
                 t = 0;
             else {
