@@ -55,9 +55,6 @@
 #include "nlapi.h"
 #include "ifmonitor.h"
 
-#include "svn-revision.h"
-
-#define SYSCONFDIR "/etc/"
 #define VARRUN "/var/run"
 #define IFPLUGD_ENV_PREVIOUS "IFPLUGD_PREVIOUS"
 #define IFPLUGD_ENV_CURRENT "IFPLUGD_CURRENT"
@@ -66,22 +63,16 @@ int interface_auto_up = 1,
     interface_do_message = 1;
 
 char *interface = NULL;
-char *run = SYSCONFDIR"/ifplugd/ifplugd.action";
-char *extra_arg = NULL;
 
 int polltime = 1,
     delay_up = 0,
     delay_down = 5;
 
 int daemonize = 1,
-    use_beep = 1,
-    no_startup_script = 0,
-    no_shutdown_script = 0,
     wait_on_fork = 0,
     wait_on_kill = 0,
     use_syslog = 1,
     ignore_retval = 0,
-    initial_down = 0,
     use_ifmonitor = 0;
 
 int disabled = 0;
@@ -93,163 +84,10 @@ enum { API_AUTO, API_ETHTOOL, API_MII, API_PRIVATE, API_WLAN, API_IFF } api_mode
 interface_status_t (*detect_beat_func)(int, char*);
 interface_status_t (*cached_detect_beat_func)(int, char*) = NULL;
 
-// 0: high, 1: low, 2: very low
-void beep(int b) {
-    int fd = -1, argp;
-
-    if (!use_beep)
-        return;
-    
-    if ((fd = open("/dev/tty1", O_WRONLY|O_NOCTTY)) < 0) {
-        use_beep = 0;
-        daemon_log(LOG_WARNING, "Could not open /dev/tty, cannot beep.");
-        goto finish;
-    }
-
-    switch (b) {
-        case 0: argp = (100<<16) + 0x637; break;
-        case 1: argp = (100<<16) + 0x937; break;
-        default: argp = (100<<16) + 0x1237; break;
-    }
-
-    if (ioctl(fd, KDMKTONE, argp) != 0) {
-        use_beep = 0;
-        daemon_log(LOG_WARNING, "Beep failure, disabled.");
-        goto finish;
-    }
-
-    usleep((argp >> 16)*1000);
-    
-finish:
-
-    if (fd >= 0)
-        close(fd);
-
-    return;
-}
-
 const char *pid_file_proc() {
     static char fn[PATH_MAX];
     snprintf(fn, sizeof(fn), "%s/ifplugd.%s.pid", VARRUN, interface);
     return fn;
-}
-
-int action(interface_status_t status) {
-    pid_t pid;
-    int _pipe[2];
-    unsigned n = 0;
-    static char buf[256];
-    char *arg = (status == IFSTATUS_UP ? "up" : "down");
-    int sigfd, r;
-    fd_set rfds;
-
-    daemon_log(LOG_INFO, "Executing '%s %s %s'.", run, interface, arg);
-    
-    if (pipe(_pipe) < 0) {
-        daemon_log(LOG_ERR, "pipe() failed: %s", strerror(errno));
-        return -1;
-    }
-
-    if ((pid = fork()) < 0) {
-        daemon_log(LOG_ERR, "fork() failed: %s", strerror(errno));
-        return -1;
-            
-    } else if (pid == 0) {
-        dup2(_pipe[1], 1);
-        dup2(_pipe[1], 2);
-        
-        if (_pipe[0] > 2)
-            close(_pipe[0]);
-
-        if (_pipe[1] > 2)
-            close(_pipe[1]);
-
-        umask(0022); /* Set up a sane umask */
-        
-        execl(run, run, interface, arg, extra_arg, (char *) NULL);
-
-        _exit(EXIT_FAILURE);
-    }
-
-    close(_pipe[1]);
-
-    FD_ZERO(&rfds);
-    FD_SET(_pipe[0], &rfds);
-    sigfd = daemon_signal_fd();
-    FD_SET(sigfd, &rfds);    
-
-    n = 0;
-
-    for (;;) {
-        fd_set wrfds = rfds;
-
-        if (select(FD_SETSIZE, &wrfds, NULL, NULL, NULL) < 0) {
-
-            if (errno == EINTR)
-                continue;
-
-            break;
-        }
-
-
-        if (FD_ISSET(_pipe[0], &wrfds)) {
-            char c;
-
-            if (read(_pipe[0], &c, 1) != 1)
-                break;
-
-            buf[n] = c;
-            
-            if (c == '\n' || n >= sizeof(buf) - 2) {
-                if (c != '\n') n++;
-                buf[n] = 0;
-
-                if (buf[0])
-                    daemon_log(LOG_WARNING, "client: %s", buf);
-            
-                n = 0;
-            } else
-                n++;
-        }
-
-        if (FD_ISSET(sigfd, &wrfds)) {
-            int sig;
-            
-            if ((sig = daemon_signal_next()) < 0) {
-                daemon_log(LOG_ERR, "daemon_signal_next(): %s", strerror(errno));
-                break;
-            }
-
-            if (sig != SIGCHLD) {
-                daemon_log(LOG_WARNING, "Killing child.");
-                kill(pid, SIGTERM);
-            }
-        }
-        
-    }
-
-    if (n > 0) {
-        buf[n] = 0;
-        daemon_log(LOG_WARNING, "client: %s", buf);
-    }
-
-    waitpid(pid, &r, 0);
-
-    close(_pipe[0]);
-
-    if (!WIFEXITED(r) || WEXITSTATUS(r) != 0) {
-        if (status == IFSTATUS_UP)
-            beep(2);
-        daemon_log(LOG_ERR, "Program execution failed, return value is %i.", WEXITSTATUS(r));
-
-        return ignore_retval ? 0 : -1;
-    } else {
-        if (status == IFSTATUS_UP)
-            beep(0);
-
-        daemon_log(LOG_INFO, "Program executed successfully.");
-        return 0;
-    }
 }
 
 interface_status_t detect_beat_auto(int fd, char *iface) {
@@ -442,11 +280,6 @@ void work(void) {
         goto finish;
     
     daemon_log(LOG_INFO, "Initialization complete, link beat %sdetected%s.", status == IFSTATUS_UP ? "" : "not ", use_ifmonitor ? (disabled ? ", interface disabled" : ", interface enabled") : "");
-    beep(status == IFSTATUS_UP ? 0 : 1);
-
-    if ((!no_startup_script && status == IFSTATUS_UP) || initial_down)
-        if (action(status) < 0)
-            goto finish;
 
     if (send_retval && daemonize && wait_on_fork) {
         char c = status == IFSTATUS_UP ? 2 : (status == IFSTATUS_DOWN ? 3 : 1);
@@ -515,7 +348,6 @@ void work(void) {
 
         if (status != s) {
             daemon_log(LOG_INFO, "Link beat %s.", status == IFSTATUS_DOWN ? "lost" : "detected");
-            beep(status == IFSTATUS_UP ? 0 : 1);
             
             if (t)
                 t = 0;
@@ -578,19 +410,11 @@ void work(void) {
         if (t && t < time(NULL)) {
             t = 0;
 
-            if (action(status) < 0)
-                goto finish;
         }
     }
 
 cleanup:
-    if (!no_shutdown_script && (status == IFSTATUS_UP || (status == IFSTATUS_DOWN && t))) {
-        setenv(IFPLUGD_ENV_PREVIOUS, strstatus(status), 1);
-        setenv(IFPLUGD_ENV_CURRENT, strstatus(-1), 1);
-        action(IFSTATUS_DOWN);
-        beep(1);
-    }
-    
+ 
 finish:
 
     if (fd >= 0)
@@ -629,22 +453,16 @@ void usage(char *p) {
            "   -a --no-auto              Do not enable interface automatically (%s)\n"
            "   -n --no-daemon            Do not daemonize (for debugging) (%s)\n"
            "   -s --no-syslog            Do not use syslog, use stderr instead (for debugging) (%s)\n"
-           "   -b --no-beep              Do not beep (%s)\n"
            "   -f --ignore-fail          Ignore detection failure, retry instead (failure is treated as DOWN) (%s)\n"
            "   -F --ignore-fail-positive Ignore detection failure, retry instead (failure is treated as UP) (%s)\n"
            "   -i --iface=IFACE          Specify ethernet interface (%s)\n"
-           "   -r --run=EXEC             Specify program to execute (%s)\n"
            "   -I --ignore-retval        Don't exit on nonzero return value of program executed (%s)\n"
            "   -t --poll-time=SECS       Specify poll time in seconds (%i)\n"
            "   -u --delay-up=SECS        Specify delay for configuring interface (%i)\n"
            "   -d --delay-down=SECS      Specify delay for deconfiguring interface (%i)\n"
            "   -m --api-mode=MODE        Force API mode (mii, priv, ethtool, wlan, auto) (%s)\n"
-           "   -p --no-startup           Don't run script on daemon startup (%s)\n"
-           "   -q --no-shutdown          Don't run script on daemon quit (%s)\n"
-           "   -l --initial-down         Run \"down\" script on startup if no cable is detected (%s)\n"
            "   -w --wait-on-fork         Wait until daemon fork finished (%s)\n"
            "   -W --wait-on-kill         When run with -k, wait until the daemon died (%s)\n"
-           "   -x --extra-arg            Specify an extra argument for action script\n"
            "   -M --monitor              Use interface monitoring (%s)\n"
            "   -h --help                 Show this help\n"
            "   -k --kill                 Kill a running daemon\n"
@@ -657,19 +475,14 @@ void usage(char *p) {
            !interface_auto_up ? "on" : "off",
            !daemonize ? "on" : "off",
            !use_syslog ? "on" : "off",
-           !use_beep ? "on" : "off",
            failure_status == IFSTATUS_DOWN ? "on" : "off",
            failure_status == IFSTATUS_UP ? "on" : "off",
            interface,
-           run,
            ignore_retval ? "on" : "off",
            polltime,
            delay_up,
            delay_down,
            m,
-           no_startup_script ? "on" : "off",
-           no_shutdown_script ? "on" : "off",
-           initial_down ? "on" : "off",
            wait_on_fork ? "on" : "off",
            wait_on_kill ? "on" : "off",
            use_ifmonitor ? "on" : "off");
@@ -680,12 +493,10 @@ void parse_args(int argc, char *argv[]) {
         {"no-auto",              no_argument, 0, 'a'},
         {"no-daemon",            no_argument, 0, 'n'},
         {"no-syslog",            no_argument, 0, 's'},
-        {"no-beep",              no_argument, 0, 'b'},
         {"ignore-fail",          no_argument, 0, 'f'},
         {"ignore-fail-positive", no_argument, 0, 'F'},
         {"ignore-retval",        no_argument, 0, 'I'},
         {"iface",                required_argument, 0, 'i'},
-        {"run",                  required_argument, 0, 'r'},
         {"poll-time",            required_argument, 0, 't'},
         {"delay-up",             required_argument, 0, 'u'},
         {"delay-down",           required_argument, 0, 'd'},
@@ -730,9 +541,6 @@ void parse_args(int argc, char *argv[]) {
                     free(interface);
                 interface = strdup(optarg);
                 break;
-            case 'r':
-                run = strdup(optarg);
-                break;
             case 'I':
                 ignore_retval = !ignore_retval;
                 break;
@@ -758,9 +566,6 @@ void parse_args(int argc, char *argv[]) {
             case 'v':
                 _version = 1;
                 break;
-            case 'b':
-                use_beep = !use_beep;
-                break;
             case 'f':
                 failure_status = IFSTATUS_DOWN;
                 break;
@@ -780,23 +585,11 @@ void parse_args(int argc, char *argv[]) {
                         exit(2);
                 }
                 break;
-            case 'p':
-                no_startup_script = !no_startup_script;
-                break;
-            case 'q':
-                no_shutdown_script = !no_shutdown_script;
-                break;
-            case 'l':
-                initial_down = !initial_down;
-                break;
             case 'w':
                 wait_on_fork = !wait_on_fork;
                 break;
             case 'W':
                 wait_on_kill = !wait_on_kill;
-                break;
-            case 'x':
-                extra_arg = strdup(optarg);
                 break;
             case 'S':
                 _suspend = 1;
@@ -846,12 +639,7 @@ void parse_args(int argc, char *argv[]) {
 
     if (_version) {
 
-#ifdef SVN_REVISION
-        printf("ifplugd "VERSION" (SVN: "SVN_REVISION")\n");
-#else
         printf("ifplugd "VERSION"\n");
-#endif
-
         exit(0);
     }
 
@@ -886,10 +674,12 @@ int main(int argc, char* argv[]) {
 
     parse_args(argc, argv);
 
+/*
     if (geteuid() != 0) {
         daemon_log(LOG_ERR, "Sorry, you need to be root to run this binary.");
         return 2;
     }
+*/
 
     if (daemon_pid_file_is_running() >= 0) {
         daemon_log(LOG_ERR, "Sorry, there is already an instance of ifplugd for %s running.", interface);
@@ -928,5 +718,6 @@ int main(int argc, char* argv[]) {
 
     // Let's go
     work();
+    daemon_log(LOG_ERR, "stop");
     return 0;
 }
