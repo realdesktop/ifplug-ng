@@ -180,8 +180,32 @@ exit:
     return 0;
 }
 
-void discover() {
-    add_interface("wlan0");
+void discover(int fd) {
+    char buf[1024];
+    struct ifconf ifc;
+    struct ifreq *ifr;
+    int i, nInterfaces;
+
+    ifc.ifc_len = sizeof(buf);
+    ifc.ifc_buf = buf;
+    if(ioctl(fd, SIOCGIFCONF, &ifc) < 0)
+    {
+        perror("ioctl(SIOCGIFCONF)");
+        return 1;
+    }
+
+    /* Iterate through the list of interfaces. */
+    ifr         = ifc.ifc_req;
+    nInterfaces = ifc.ifc_len / sizeof(struct ifreq);
+    for(i = 0; i < nInterfaces; i++)
+    {
+        struct ifreq *item = &ifr[i];
+
+        if(!strcmp(item->ifr_name, "lo"))
+            continue;
+
+        add_interface(item->ifr_name);
+    }
 }
 
 void status_change(struct interface_state *iface) {
@@ -232,7 +256,7 @@ void work(void) {
         goto finish;
     }
 
-    discover();
+    discover(fd);
 
     if (nlapi_open(RTMGRP_LINK) < 0)
         goto finish;
