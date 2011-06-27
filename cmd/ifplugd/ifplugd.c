@@ -61,6 +61,7 @@
 #define IFPLUGD_ENV_PREVIOUS "IFPLUGD_PREVIOUS"
 #define IFPLUGD_ENV_CURRENT "IFPLUGD_CURRENT"
 
+
 struct interface_state {
     char name[10];
     interface_status_t status;
@@ -71,7 +72,28 @@ struct interface_state {
     struct interface_state* next;
 };
 
+char *strstatus(interface_status_t s);
+
 struct interface_state *interface;
+struct rbus_root *rbus;
+
+#define end {""}
+
+static struct rbus_child root_children[] = {
+    {"iface", NULL, NULL},
+    end
+};
+
+char* iface_read_state(struct rbus_t *rbus, char* buf) {
+    struct interface_state *iface = rbus->native;
+
+    return strstatus(iface->status);
+};
+
+static struct rbus_prop iface_props[] = {
+    {"state", iface_read_state},
+    end
+};
 
 int polltime = 1,
     delay_up = 0,
@@ -129,6 +151,8 @@ char *strstatus(interface_status_t s) {
 
 static inline void add_interface(const char *ifname) {
     struct interface_state *iface;
+    struct rbus_child *child;
+    struct rbus_t *priv;
 
     iface = malloc(sizeof(struct interface_state));
 
@@ -141,8 +165,49 @@ static inline void add_interface(const char *ifname) {
     else
         interface = iface;
 
+    // register rbus object
+    priv = malloc(sizeof(*priv));
+    priv->native = iface;
+    strcpy(priv->name, iface->name);
+    priv->root = rbus;
+    priv->props = &iface_props[0];
+
+    // register rbus child
+    child = rbus->rbus.childs;
+    while (child->next)
+        child = child->next;
+
+    child->next = malloc(sizeof(*child));
+    child = child->next;
+
+    strcpy(child->name, "iface");
+    child->rbus = priv;
+
+    daemon_log(LOG_INFO, "added interface %s\n", iface->name);
 }
 
+void rbus_drop_child(struct rbus_t *rbus, void *ref) {
+    struct rbus_child *child, *p=NULL;
+
+    for(child = rbus->childs; child; child = child->next) { 
+
+        if(!child->rbus)
+            continue;
+
+        if(child->rbus->native != ref)
+            continue;
+
+        if(p)
+            p->next = child->next;
+        else
+            rbus->childs->next = child->next;
+
+        printf("drop child\n");
+        free(child);
+    }
+
+
+}
 
 int ifmonitor_cb(int b, int index, unsigned short type, const char *name) {
 
@@ -160,7 +225,10 @@ int ifmonitor_cb(int b, int index, unsigned short type, const char *name) {
         } else {
             if(prev)
                 prev = iface->next;
+            else
+                interface = iface->next;
 
+            rbus_drop_child(&rbus->rbus, iface);
             free(iface);
 
             goto exit;
@@ -173,7 +241,6 @@ int ifmonitor_cb(int b, int index, unsigned short type, const char *name) {
 
     add_interface(name);
 
-    daemon_log(LOG_INFO, "added interface %s\n", iface->name);
 
 exit:
 
@@ -256,6 +323,10 @@ void work(void) {
         goto finish;
     }
 
+    rbus = rbus_init("unix!/tmp/ifplugd.9p");
+    rbus->rbus.childs = &root_children[0];
+    rbus->rbus.root = rbus; // move out!
+
     discover(fd);
 
     if (nlapi_open(RTMGRP_LINK) < 0)
@@ -270,8 +341,6 @@ void work(void) {
 
     FD_SET(nlapi_fd, &fds);
 
-    struct rbus_root *rbus;
-    rbus = rbus_init("unix!/tmp/ifplugd.9p");
 
     for (;;) {
         struct interface_state *iface;
