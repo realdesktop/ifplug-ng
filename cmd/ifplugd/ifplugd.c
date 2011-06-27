@@ -105,7 +105,7 @@ int daemonize = 1,
     use_syslog = 1,
     ignore_retval = 0;
 
-//int disabled = 0;
+int netlink;
 
 const char *pid_file_proc() {
     static char fn[PATH_MAX];
@@ -159,6 +159,7 @@ static inline void add_interface(const char *ifname) {
     strcpy(iface->name, ifname);
     iface->next = NULL;
     iface->status_time = -1;
+    iface->detect = NULL;
 
     if(interface)
         interface->next = iface;
@@ -171,6 +172,7 @@ static inline void add_interface(const char *ifname) {
     strcpy(priv->name, iface->name);
     priv->root = rbus;
     priv->props = &iface_props[0];
+    priv->childs = NULL;
 
     // register rbus child
     child = rbus->rbus.childs;
@@ -202,12 +204,45 @@ void rbus_drop_child(struct rbus_t *rbus, void *ref) {
         else
             rbus->childs->next = child->next;
 
-        printf("drop child\n");
         free(child);
     }
 
 
 }
+
+int is_iface_available(int s, char *p) {
+    struct ifreq req;
+    int r;
+
+    memset(&req, 0, sizeof(req));
+    strncpy(req.ifr_name, p, IFNAMSIZ);
+
+    if ((r = ioctl(s, SIOCGIFINDEX, &req)) < 0 && errno != ENODEV) {
+        daemon_log(LOG_ERR, "SIOCGIFINDEX failed: %s\n", strerror(errno));
+        return -1;
+    }
+    return r >= 0 && req.ifr_ifindex >= 0;
+}
+
+void drop_interface(struct interface_state *diface) {
+    struct interface_state *iface, *prev = NULL;
+
+    for(iface = interface; iface; iface = iface->next) {
+
+        if(diface != iface)
+            continue;
+
+        if(prev)
+            prev = iface->next;
+        else
+            interface = iface->next;
+
+        rbus_drop_child(&rbus->rbus, iface);
+        free(iface);
+
+    }
+
+};
 
 int ifmonitor_cb(int b, int index, unsigned short type, const char *name) {
 
@@ -220,27 +255,17 @@ int ifmonitor_cb(int b, int index, unsigned short type, const char *name) {
         if(strcmp(iface->name, name))
             continue;
 
-        if(b) {
-            goto exit;
-        } else {
-            if(prev)
-                prev = iface->next;
-            else
-                interface = iface->next;
+        if(!b)
+            drop_interface(iface);
 
-            rbus_drop_child(&rbus->rbus, iface);
-            free(iface);
-
-            goto exit;
-
-        }
+        goto exit;
     }
 
     if(!b)
         goto exit;
 
-    add_interface(name);
-
+    if(is_iface_available(netlink, name))
+        add_interface(name);
 
 exit:
 
@@ -297,7 +322,6 @@ void status_change(struct interface_state *iface) {
 }
 
 void work(void) {
-    int fd = -1;
     fd_set fds;
     int sigfd;
     static char log_ident[256];
@@ -318,7 +342,7 @@ void work(void) {
         goto finish;
     }
 
-    if ((fd = socket(AF_LOCAL, SOCK_DGRAM, 0)) < 0) {
+    if ((netlink = socket(AF_LOCAL, SOCK_DGRAM, 0)) < 0) {
         daemon_log(LOG_ERR, "socket(): %s", strerror(errno));
         goto finish;
     }
@@ -327,7 +351,7 @@ void work(void) {
     rbus->rbus.childs = &root_children[0];
     rbus->rbus.root = rbus; // move out!
 
-    discover(fd);
+    discover(netlink);
 
     if (nlapi_open(RTMGRP_LINK) < 0)
         goto finish;
@@ -380,7 +404,13 @@ void work(void) {
         }
 
         for(iface = interface; iface; iface=iface->next) {
-            detect_beat(fd, iface);
+
+            if(! is_iface_available(netlink, iface->name)) {
+                drop_interface(iface);
+                continue;
+            }
+
+            detect_beat(netlink, iface);
             status_change(iface); 
         }
 
@@ -419,8 +449,8 @@ cleanup:
  
 finish:
 
-    if (fd >= 0)
-        close(fd);
+    if (netlink >= 0)
+        close(netlink);
 
     nlapi_close();
     
