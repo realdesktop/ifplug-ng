@@ -75,7 +75,7 @@ struct interface_state {
 
 char *strstatus(interface_status_t s);
 
-struct interface_state *interface;
+static struct interface_state *interface = NULL;
 struct rbus_root *rbus;
 
 #define end {""}
@@ -156,11 +156,10 @@ static inline void add_interface(const char *ifname) {
     struct rbus_t *priv;
 
     iface = malloc(sizeof(struct interface_state));
+    bzero(iface, sizeof(struct interface_state));
 
     strcpy(iface->name, ifname);
-    iface->next = NULL;
     iface->status_time = -1;
-    iface->detect = NULL;
 
     if(interface)
         interface->next = iface;
@@ -168,21 +167,23 @@ static inline void add_interface(const char *ifname) {
         interface = iface;
 
     // register rbus object
-    priv = malloc(sizeof(*priv));
+    priv = malloc(sizeof(struct rbus_t));
+    bzero(priv, sizeof(struct rbus_t));
+
     priv->native = iface;
     iface->rbus = priv;
     strcpy(priv->name, iface->name);
     priv->root = rbus;
     priv->props = &iface_props[0];
-    priv->childs = NULL;
 
     // register rbus child
     child = rbus->rbus.childs;
     while (child->next)
         child = child->next;
 
-    child->next = malloc(sizeof(*child));
+    child->next = malloc(sizeof(struct rbus_child));
     child = child->next;
+    bzero(child, sizeof(struct rbus_child));
 
     strcpy(child->name, "iface");
     child->rbus = priv;
@@ -357,7 +358,6 @@ void work(void) {
 
     rbus = rbus_init("unix!/tmp/ifplugd.9p");
     rbus->rbus.childs = &root_children[0];
-    rbus->rbus.root = rbus; // move out!
 
     discover(netlink);
 
